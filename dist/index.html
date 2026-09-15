@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bitsight Continuous Monitoring 繁體中文導覽</title>
+  <meta name="description" content="BitSight Continuous Monitoring 繁體中文教學索引：依工作情境理解功能、查找英文名稱與確認風險資料。" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b3b5b'/%3E%3Cpath d='M16 43V20h15c10 0 17 5 17 12s-7 11-17 11H16zm10-8h6c4 0 6-1 6-3s-2-4-6-4h-6v7z' fill='%23fff'/%3E%3Ccircle cx='47' cy='17' r='6' fill='%23ed6b43'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="mark">中</span><div><strong>Bitsight 中文導覽</strong><small>Continuous Monitoring</small></div></div>
+      <label class="switch-label" for="search">搜尋主題</label>
+      <input id="search" type="search" placeholder="中文名稱或英文名稱" autocomplete="off" />
+      <nav id="nav" aria-label="主要導覽"></nav>
+      <div class="side-foot">獨立製作的學習範例<br>非 BitSight 官方中文文件</div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><button id="menuBtn" class="menu-btn" aria-controls="sidebar" aria-expanded="false">目錄</button><div class="crumb" id="crumb"></div><div class="top-actions"><button id="tourBtn">使用說明</button></div></header>
+      <main id="main" tabindex="-1"></main>
+    </div>
+  </div>
+  <dialog id="tour"><div class="dialog-head"><strong id="tourTitle"></strong><button id="closeTour" aria-label="關閉">×</button></div><p id="tourText"></p><div class="dialog-foot"><span id="tourStep"></span><button id="prevTour">上一步</button><button class="primary" id="nextTour">下一步</button></div></dialog>
+  <script src="./script.js"></script>
+</body>
+</html>
