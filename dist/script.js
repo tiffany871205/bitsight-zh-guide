@@ -87,6 +87,55 @@ const uiTerms = [
   ['Public Disclosures','公開揭露'],['Download as CSV','下載 CSV'],['Columns','欄位'],['Views','檢視方式']
 ];
 
+const dashboardCards = [
+  ['Latest Updates','最新動態','彙整新興資安事件（Emerging Security Events）與威脅情報新聞（Threat Intel News）。適合每天快速確認外部威脅是否與受監控公司有關。'],
+  ['Median Rating','評等中位數','顯示目前範圍內公司的安全評等中位數與期間變化。中位數適合觀察整體水準，但不能取代對高關鍵性或低評等公司的個別審查。'],
+  ['Featured Report','精選報表','提供建議報表與快速入口，例如公司相對風險。可前往報表頁檢視或建立報表。'],
+  ['Getting Started','開始使用','顯示初始設定任務進度，包括訂閱公司、新增使用者與群組、建立層級、資料夾、警示、報表及邀請公司。'],
+  ['Portfolio Risk Matrix','投資組合風險矩陣','以公司關鍵性（Criticality／Tier）和安全評等風險交叉排列，協助區分應升級處理、審查或持續監控的公司。'],
+  ['Rating Changes','評等變化','列出選定期間內評等發生變化的供應商、變動分數與目前評等。應優先查看大幅下降或關鍵供應商。'],
+  ['Recent Security Incidents','近期資安事件','顯示篩選範圍內近期發生的資安事件。沒有結果只代表目前條件與期間內未顯示事件。'],
+  ['Risk Vector Alerts','風險面向警示','彙整風險面向的變動警示，並可前往 Alerts 查看完整清單與處理狀態。'],
+  ['Trending Vendors','熱門供應商','顯示近期搜尋熱度上升的公司，可閱讀公司摘要或進行訂閱；熱度並不等同資安風險高低。'],
+  ['Life Cycle','生命週期','依供應商管理階段顯示公司，例如 Re-Assessment（重新評估），用於追蹤不同階段的工作量。'],
+  ['Used and Allocated Subscriptions','已使用與已配置訂閱','顯示 Continuous Monitoring、Vendor Selection 等訂閱額度的使用情況，供管理監控容量。']
+];
+
+const dashboardTerms = [
+  ['Portfolio Dashboard','投資組合儀表板','集中查看監控公司整體風險與近期變化。'],
+  ['All Companies','所有公司','目前儀表板套用的公司範圍；可切換資料夾或其他公司集合。'],
+  ['Days / 30 Days','天數／30 天','控制多張卡片採用的觀察期間。改變期間後，數字不可直接與不同期間比較。'],
+  ['Add Cards','新增卡片','將其他可用的資訊卡加入儀表板。'],
+  ['Edit Dashboard','編輯儀表板','調整卡片位置或移除不需要的卡片。'],
+  ['Select','選擇','設定個別卡片的範圍或呈現條件；各卡片選項可能不同。'],
+  ['Replace Card','替換卡片','以另一張可用卡片取代目前卡片。'],
+  ['Security Rating','安全評等','BitSight 對組織外部可觀測資安表現的量化結果；應搭配趨勢、風險面向及具體發現判讀。'],
+  ['Median Rating','評等中位數','將公司評等排序後位於中間的數值，比平均數較不容易受極端值影響。'],
+  ['Criticality','關鍵性','公司對組織的重要程度，通常由 Tier（層級）表達，並非 BitSight 評等本身。'],
+  ['Tier','層級','組織自行設定的供應商重要性分類，例如 Tier 1、Tier 2、Tier 3。'],
+  ['Risk','風險','矩陣中的評等風險方向，由低風險到高風險。'],
+  ['Escalate','升級處理','風險與關鍵性組合需要立即關注，通常應聯絡供應商並追查不可接受的發現。'],
+  ['Review','審查','需要進一步調查，確認是否要採取行動。'],
+  ['Monitor','持續監控','目前不需立即行動，但仍應依既定頻率追蹤。'],
+  ['Emerging Security Events','新興資安事件','新出現或近期受到高度關注的弱點與安全事件。'],
+  ['Companies Exposed','曝險公司數','在目前監控範圍內，被偵測到可能與該弱點曝險相關的公司數量。'],
+  ['Exposure Trend','曝險趨勢','一段期間內受影響公司數量的變化；上升通常代表調查優先度增加。'],
+  ['CVSS','通用弱點評分系統','描述弱點技術嚴重性的標準分數，不代表你的供應商一定可被成功攻擊。'],
+  ['DVE Score','動態弱點可利用性分數','用動態威脅與可利用性訊號協助排列弱點優先順序，應與曝險證據及業務關鍵性共同判斷。'],
+  ['NVD Advisory','NVD 弱點公告','前往美國 NVD 查看 CVE 的公開技術資料。'],
+  ['Vendor Advisory','廠商公告','前往產品廠商發布的修補與緩解建議。'],
+  ['View Vulnerability','查看弱點','開啟該弱點在 Vulnerability Detection 中的詳細資料。'],
+  ['Rating Changes','評等變化','選定期間內供應商評等上升或下降的紀錄。'],
+  ['Life Cycle','生命週期','供應商目前所處的內部管理或評估階段。'],
+  ['Re-Assessment','重新評估','供應商進入再次評估的生命週期階段。'],
+  ['Continuous Monitoring','持續監控','持續追蹤已訂閱公司的安全評等與風險變化。'],
+  ['Vendor Selection','供應商遴選','在正式持續監控前，用於搜尋及初步評估候選供應商的額度或功能。']
+];
+
+function dashboardPage(p){
+  return `<article class="doc"><button class="back-link" data-page="home">← 返回學習索引</button><div class="eyebrow">開始使用 / ${esc(p.en)}</div><h1>儀表板</h1><p class="lead">Portfolio Dashboard 是登入 Continuous Monitoring 後的投資組合總覽，用來快速發現「哪些公司或事件值得先調查」，再前往公司清單、弱點、警示或報表頁深入查證。</p><div class="callout"><strong>進入路徑</strong><br>左側主選單 <code>Dashboard</code>。頁面內容會受帳號授權、使用者權限、公司範圍、資料夾以及自訂卡片影響。</div><h2>頁面頂端與共用側欄</h2><div class="doc-table"><table><thead><tr><th>介面文字</th><th>中文與功能</th></tr></thead><tbody>${[['Continuous Monitoring','目前使用的產品／應用程式；可透過應用程式切換器切換其他 BitSight 產品。'],['All Companies','目前套用的公司範圍。切換範圍後，儀表板各卡片會依新範圍重新計算。'],['Notifications','通知中心，查看系統或監控相關通知。'],['Settings','帳號與平台相關設定入口；實際項目依權限而異。'],['Assistant','產品內協助入口。'],['30 Days','儀表板觀察期間。'],['Add Cards','加入新的資訊卡。'],['Edit Dashboard','調整、替換或移除現有資訊卡。']].map(([a,b])=>`<tr><td><strong>${a}</strong></td><td>${b}</td></tr>`).join('')}</tbody></table></div><h2>儀表板資訊卡</h2><div class="guide-cards">${dashboardCards.map(([en,zh,body])=>`<section class="guide-card"><strong>${esc(zh)}</strong><small>${esc(en)}</small><p>${esc(body)}</p></section>`).join('')}</div><h2>建議操作流程</h2><ol><li><strong>確認範圍：</strong>先看頂端公司選擇器是否為 All Companies，或是否已切換到特定資料夾。</li><li><strong>確認期間：</strong>選擇要觀察的天數；後續比較時要使用相同期間。</li><li><strong>先看風險矩陣：</strong>從高關鍵性且高風險的公司開始，依 Escalate、Review、Monitor 決定處理順序。</li><li><strong>查看異常變化：</strong>檢查 Rating Changes、Recent Security Incidents 與 Risk Vector Alerts，特別注意大幅下降或新事件。</li><li><strong>連回證據：</strong>從卡片前往 Companies List、Alerts 或 Vulnerability Detection，核對公司、資產、發現時間與證據。</li><li><strong>建立追蹤：</strong>依內部流程記錄負責人、處理狀態與下次檢查日期；不要只靠儀表板數字做最終判斷。</li></ol><div class="example"><strong>使用情境：每日風險巡檢</strong><p>先確認 Latest Updates 是否有新興事件影響受監控公司，再查看關鍵供應商是否出現評等下降或新警示。若某事件同時具高 CVSS／DVE Score 且 Companies Exposed 大於零，前往弱點詳情核對實際曝險證據。</p></div><div class="example"><strong>使用情境：主管月報</strong><p>固定使用相同公司範圍與期間，記錄 Median Rating、評等變化公司數、風險矩陣分布及重大事件。報告中應說明範圍與日期，避免把中位數當成所有供應商的表現。</p></div><h2>專有名詞與介面翻譯</h2><div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>功能與判讀</th></tr></thead><tbody>${dashboardTerms.map(([en,zh,note])=>`<tr><td><strong>${esc(en)}</strong></td><td>${esc(zh)}</td><td>${esc(note)}</td></tr>`).join('')}</tbody></table></div><h2>常見誤解與注意事項</h2><ul><li><strong>儀表板是摘要，不是完整證據：</strong>任何異常都應開啟對應公司、警示、風險面向或弱點頁核對。</li><li><strong>安全評等不等於公司一定遭入侵：</strong>評等與外部可觀測訊號用於風險排序，仍需結合內部調查與供應商回覆。</li><li><strong>搜尋熱度不等於風險：</strong>Trending Vendors 表示關注度增加，不能單獨作為升級供應商風險的理由。</li><li><strong>空白結果受條件影響：</strong>「No alerts available」或沒有事件，可能是範圍、期間或權限造成。</li><li><strong>自訂畫面可能不同：</strong>卡片可新增、替換及重排，所以不同使用者看到的順序未必一致。</li></ul><p class="note">以上名稱依目前可見的 BitSight Continuous Monitoring 介面整理；中文為教學用建議譯名，並非 BitSight 官方中文版。網站不保存或顯示帳號中的公司數值與名稱。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="companies"><strong>公司清單</strong><small>Companies List · 從整體摘要進入公司層級調查。</small></button><button class="feature-card" data-page="vulnerability"><strong>弱點偵測</strong><small>Vulnerability Detection · 追查新興事件與曝險公司。</small></button></div></article>`;
+}
+
 const nav = document.getElementById('nav');
 const main = document.getElementById('main');
 const crumb = document.getElementById('crumb');
@@ -114,6 +163,7 @@ function home(){
   return `<article class="doc"><div class="eyebrow">CONTINUOUS MONITORING / 學習索引</div><h1>從監控名單到風險追蹤</h1><p class="lead">這份繁體中文教學索引整理 ${total} 個功能主題。先用下方路徑建立工作脈絡，再從目錄查詢原介面的英文名稱。</p><div class="callout"><strong>閱讀前先知道</strong><br>這是獨立製作的教學文件，非 BitSight 官方文件；不連接帳號，也不提供實際操作。功能名稱、可見資料與操作步驟可能因版本、授權及權限而異，請以你目前的原系統為準。</div><h2>建議從這四步開始</h2><div class="journey">${[['companies','01','確認監控對象','在公司清單找到供應商，確認公司名稱、關係及監控範圍。'],['vendor-overview','02','閱讀風險概況','從單一供應商總覽判斷趨勢，再往風險面向深入。'],['findings','03','核對具體發現','檢查發現事項的時間、資產和內容，不只看總評等。'],['portfolio-alerts','04','持續追蹤變化','設定追蹤節奏，將警示與後續處理連結起來。']].map(([id,n,title,body])=>`<button class="journey-item" data-page="${id}"><b>${n}</b><span><strong>${title}</strong><small>${body}</small></span></button>`).join('')}</div><h2>依工作範圍找主題</h2><div class="feature-grid">${groups.slice(1).map(([group,items])=>`<section class="feature-card"><strong>${group}</strong><p>${groupGuides[group]}</p><small>${items.length} 個主題</small><button class="text-link" data-page="${items[0][0]}">閱讀${items[0][1]} →</button></section>`).join('')}</div><h2>常見英文術語</h2><p>中文譯名用於查找與教學，非官方介面譯文。</p>${uiTerms.slice(0,6).map(([en,zh])=>`<div class="term"><strong>${en}</strong><span>${zh}</span></div>`).join('')}</article>`;
 }
 function page(p){
+  if(p.id==='dashboard')return dashboardPage(p);
   const d=details[p.id]||['認識功能','查看相關資訊。','依畫面提示進行操作。'];
   const related=groups.find(g=>g[0]===p.group)[1].filter(x=>x[0]!==p.id).slice(0,4);
   const terms=p.id==='companies'?uiTerms:[[p.en,p.zh]];
