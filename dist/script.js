@@ -180,6 +180,45 @@ const companyColumns = [
   ['Subscription Type','訂閱類型','顯示目前對該公司的訂閱或監控型態。']
 ];
 
+const assessmentFilters = [
+  ['Company','公司','只看特定公司的框架評估紀錄。'],
+  ['Status','狀態','依評估進度篩選；目前畫面已套用 Completed（已完成）。其他狀態選項需以實際資料為準。'],
+  ['User','使用者','依與評估紀錄相關的使用者縮小結果；實際角色意義應在紀錄詳情確認。'],
+  ['Date','日期','以日期條件尋找特定期間的評估。先確認篩選的是哪個日期欄位。'],
+  ['Framework','框架','只看指定資安框架或評估架構的紀錄。']
+];
+
+const assessmentColumns = [
+  ['Assessment Name','評估名稱','辨識同一公司不同評估或不同輪次的紀錄。'],
+  ['Company','公司','評估所對應的公司；不要只憑名稱判定涵蓋的法人或資產範圍。'],
+  ['Framework','框架','該紀錄採用的評估框架。比較結果前需確認框架與版本一致。'],
+  ['Status','狀態','評估目前的流程狀態；Completed 代表已完成，不等於全部控制項都符合要求。'],
+  ['Completed Date','完成日期','評估完成的時間。判斷證據是否仍適用時要看資料新舊。'],
+  ['User','使用者','表格呈現的相關使用者欄位；可能涉及建立、負責或操作人員，須看詳細資料確認。'],
+  ['Subscription Type','訂閱類型','評估所屬或可用的產品訂閱類型。'],
+  ['Compliance','符合情形','框架符合性相關結果；數值或標示的算法應以具體評估詳情為準。'],
+  ['Actions','動作','對單筆評估可執行的操作入口；內容可能受狀態與權限限制。']
+];
+
+const assessmentControls = [
+  ['Active Filters / Applied filters','使用中／已套用的篩選條件','查看目前哪些條件影響結果；本次畫面顯示 Completed。'],
+  ['Clear All / Clear','清除全部／清除單項','移除篩選條件後再檢查結果，避免把 0 筆誤判為沒有評估。'],
+  ['Columns','欄位','調整表格顯示的欄位。'],
+  ['Views','檢視方式','切換儲存的評估清單檢視。'],
+  ['Create View','建立檢視','將目前的篩選與欄位配置保存以供再次使用。'],
+  ['Save changes','儲存變更','在可編輯的檢視發生變更後保存；目前畫面為停用狀態。'],
+  ['Completed Assessments','已完成評估','目前顯示的檢視／範圍名稱，應搭配左側 Status 條件一起核對。'],
+  ['Search','搜尋','在目前清單範圍內搜尋可用欄位。'],
+  ['Enter full screen','進入全螢幕','放大評估表格的工作區。'],
+  ['Column options','欄位選項','開啟欄名旁的設定，例如該欄可用的排序或顯示操作。'],
+  ['Prev / Next','上一頁／下一頁','在有多頁結果時切換；目前 0 筆時會停用。']
+];
+
+function assessmentPage(p){
+  const table=(rows)=>`<div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>功能與判讀</th></tr></thead><tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return `<article class="doc"><button class="back-link" data-page="companies">← 返回公司清單</button><div class="eyebrow">投資組合風險 / Assessments (FI)</div><h1>框架情報評估</h1><p class="lead">這頁在 BitSight 原介面標為 Framework Intelligence Assessments，用來按公司、框架、狀態、使用者與日期查找框架評估紀錄，並查看完成時間及符合情形。側欄的 Assessments (FI) 與 Vendor Risk 底下的 Assessments 位置不同，查找時應先確認所處模組。</p><div class="callout"><strong>進入路徑與目前畫面</strong><br>左側選單 <code>Portfolio Risk → Assessments (FI)</code>。本次可見的檢視為 <code>Completed Assessments</code>，左側套用 <code>Status: Completed</code>，表格顯示 <code>0 Rows / No results found</code>。這只描述目前的範圍與條件，不能推論帳號完全沒有評估紀錄。</div><h2>頁面結構</h2><ol><li><strong>篩選面板：</strong>查看 Active Filters，再用 Company、Status、User、Date、Framework 縮小範圍。</li><li><strong>檢視與欄位：</strong>Columns 可調整表格欄位，Views 與 Create View 用於管理常用清單配置。</li><li><strong>評估表格：</strong>每列代表一筆評估紀錄；先核對 Assessment Name、Company、Framework、Status，再判讀完成日期與符合情形。</li><li><strong>結果與分頁：</strong>Rows 顯示符合條件的筆數；有資料時可調整每頁筆數與換頁。</li></ol><h2>篩選器對照</h2>${table(assessmentFilters)}<h2>表格欄位對照</h2>${table(assessmentColumns)}<h2>按鈕與介面文字</h2>${table(assessmentControls)}<h2>建議操作流程</h2><ol><li>先核對頂端公司範圍，以及目前 Views／Completed Assessments 的選取狀態。</li><li>查看 Active Filters；若沒有結果，先檢查 Completed 是否排除了尚未完成的紀錄，再依需要清除或改變條件。</li><li>以 Company 或 Framework 縮小清單，避免混合不同公司或不同框架的評估。</li><li>有結果後，對照 Status、Completed Date 與 Compliance；若要判定是否符合控制要求，應開啟評估詳情核對問題、證據、例外與框架版本。</li><li>記錄審查日期、評估範圍與待補證據；不要只把清單中的狀態或符合情形當成最終結論。</li></ol><div class="example"><strong>使用情境：找出某供應商的最新完成評估</strong><p>選擇正確公司後保留 Completed 條件，再按 Completed Date 檢查近期紀錄；比較前確認 Framework 是否相同。若同一公司有多筆評估，不要把不同輪次的結果合併解讀。</p></div><div class="example"><strong>使用情境：清單為空時排查</strong><p>先看左側 Applied filters 與目前檢視名稱，必要時清除 Status 或日期限制，再確認公司範圍與權限。若仍為空，才向帳號管理者或評估負責人確認是否有可見紀錄。</p></div><h2>容易誤判的地方</h2><ul><li><strong>Completed 不等於合規：</strong>「完成」是流程狀態，Compliance 才是另一個結果欄位，且仍須檢查評估細節。</li><li><strong>0 Rows 不等於沒有評估：</strong>可能是 Completed、公司範圍、日期、檢視或權限限制。</li><li><strong>框架不同不宜直接比較：</strong>先確認 Framework、版本、適用範圍與完成日期。</li><li><strong>User 欄位不可直接推定責任：</strong>須查看評估詳情才知道該使用者的實際角色。</li></ul><p class="note">本頁依 2026-09-17 可見的 BitSight 介面整理。由於目前檢視沒有結果，未臆測單筆評估詳情、Compliance 算法或其他 Status 選項；中文為教學用建議譯名，非官方譯文。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="critical-assets"><strong>關鍵資產</strong><small>Critical Assets · 側欄下一個主題。</small></button><button class="feature-card" data-page="assessments"><strong>供應商評估</strong><small>Assessments · 對照 Vendor Risk 模組中的評估資訊。</small></button></div></article>`;
+}
+
 function companyPage(p){
   const table=(headers,rows)=>`<div class="doc-table"><table><thead><tr>${headers.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
   return `<article class="doc"><button class="back-link" data-page="dashboard">← 返回儀表板</button><div class="eyebrow">投資組合風險 / Companies List</div><h1>公司清單</h1><p class="lead">Companies List 是受監控公司的工作清單。先確認範圍與篩選條件，再依評等、變化趨勢及供應商重要性找出要調查的公司；點選公司名稱後才進入個別風險詳情。</p><div class="callout"><strong>進入路徑</strong><br>左側選單 <code>Portfolio Risk → Companies List</code>。頁面頂端的公司範圍選擇器、左側 Filters，以及已儲存的 Views 都可能影響畫面結果。</div><h2>畫面怎麼看</h2><ol><li><strong>頁首：</strong>Companies List 標題旁有 Vendor Discovery、Reports、Actions。</li><li><strong>左側篩選面板：</strong>以 Folder、Tier、Security Rating 等條件縮小清單；多項條件同時套用時，結果可能變成零筆。</li><li><strong>表格工具列：</strong>可搜尋、調整欄位、切換檢視、建立檢視、匯出 CSV 或進入全螢幕。</li><li><strong>結果表格與頁尾：</strong>查看欄位、勾選公司、排序、調整每頁筆數和換頁。操作批次動作前應核對選取範圍。</li></ol><h2>預設表格欄位</h2>${table(['英文','中文','用途與判讀'],companyColumns)}<h2>篩選器完整對照</h2><p>目前可見的篩選面板包含以下 20 類。選項會隨授權、資料與帳號設定不同；下表說明篩選用途，不推定特定公司符合條件。</p>${table(['英文','建議中文','何時使用／注意'],companyFilters)}<h2>按鈕與工具</h2>${table(['英文','建議中文','功能'],companyControls)}<h2>常見操作情境</h2><div class="example"><strong>找出要優先檢查的關鍵供應商</strong><p>先選定正確資料夾或 All Companies，再以 Tier 縮小到關鍵層級，搭配較低 Security Rating 或下降的 Trend。開啟公司頁後核對風險面向、發現事項與資料時間，不只依分數排序。</p></div><div class="example"><strong>檢查聯絡資料缺口</strong><p>以 Has Contacts 找出尚無聯絡人的公司，再依 Tier 決定補齊順序。聯絡人屬於協作資料，不能從「沒有聯絡人」推論公司風險高。</p></div><div class="example"><strong>盤點共同技術依賴</strong><p>使用 Service Provider、Products 或 Software 篩選相關公司，建立待查清單；接著到第四方風險或個別公司頁確認關聯與實際曝險。</p></div><h2>建議操作流程</h2><ol><li>確認頁面標題為 Companies List，並核對頂端公司範圍。</li><li>查看是否已有 Folder、Views 或其他篩選條件；若結果為零，先檢查既有條件。</li><li>輸入公司名稱搜尋，或使用 Tier、Relationship、Security Rating 等條件逐步縮小範圍。</li><li>依目的調整 Columns；比較評等時同時顯示 Trend、Tier 與 Relationship。</li><li>點選公司名稱，進入個別公司頁核對評等時間、發現事項及資產證據。</li><li>如需匯出或批次動作，先核對公司選取範圍、權限與資料處理規範。</li></ol><h2>容易誤判的地方</h2><ul><li><strong>零筆結果不等於沒有公司：</strong>常見原因是資料夾、檢視或多重篩選限制。</li><li><strong>Tier 與 Security Rating 不同：</strong>前者是內部關鍵性分類，後者是外部可觀測資安評等。</li><li><strong>Trend 與目前分數不同：</strong>評等高的公司也可能正在下降，需看期間與變化幅度。</li><li><strong>技術關聯不等於存在弱點：</strong>Software、Products、Open Ports 等只提供調查線索。</li><li><strong>匯出資料可能敏感：</strong>CSV 可能包含供應商清單或內部分類，應依組織規範保存與分享。</li></ul><p class="note">本頁依 2026-09-17 可見的 BitSight Continuous Monitoring 介面整理。中文是教學用建議譯名，非官方譯文；網站不複製帳號內的公司名稱、數值或聯絡資料。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="fi-assessments"><strong>框架評估</strong><small>Assessments (FI) · 側欄下一個主題。</small></button><button class="feature-card" data-page="vendor-overview"><strong>供應商總覽</strong><small>Overview · 從清單進入單一公司的風險脈絡。</small></button></div></article>`;
@@ -218,6 +257,7 @@ function home(){
 function page(p){
   if(p.id==='dashboard')return dashboardPage(p);
   if(p.id==='companies')return companyPage(p);
+  if(p.id==='fi-assessments')return assessmentPage(p);
   const d=details[p.id]||['認識功能','查看相關資訊。','依畫面提示進行操作。'];
   const related=groups.find(g=>g[0]===p.group)[1].filter(x=>x[0]!==p.id).slice(0,4);
   const terms=p.id==='companies'?uiTerms:[[p.en,p.zh]];
