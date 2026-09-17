@@ -132,6 +132,59 @@ const dashboardTerms = [
   ['Vendor Selection','供應商遴選','在正式持續監控前，用於搜尋及初步評估候選供應商的額度或功能。']
 ];
 
+const companyFilters = [
+  ['Folder','資料夾','依內部分組縮小公司範圍；先檢查是否留有舊的資料夾條件。'],
+  ['Tier','層級','依供應商重要性分層，適合先找關鍵供應商。'],
+  ['Subscription Type','訂閱類型','區分公司目前使用的產品或監控訂閱類型。'],
+  ['Vendor Action Plan','供應商行動計畫','依對供應商設定的處理分類篩選；名稱與選項以帳號設定為準。'],
+  ['Relationship','關係','依組織與公司的業務關係篩選，例如供應商或其他關係類型。'],
+  ['Life Cycle','生命週期','依公司目前所處的內部評估或管理階段篩選。'],
+  ['Has Contacts','有無聯絡人','找出已有或尚未維護聯絡人的公司。'],
+  ['Security Rating','安全評等','以評等範圍找出需要優先審查的公司；評等不是入侵證據。'],
+  ['Industry','產業','依公司所屬產業縮小結果。'],
+  ['Country','國家／地區','依公司所在地或系統顯示的國家資訊篩選。'],
+  ['Self Published','自行發布','依公司是否提供自行發布的資料篩選；先核對資料來源與日期。'],
+  ['Rating Type','評等類型','區分畫面提供的評等類型；選項與涵義以目前介面為準。'],
+  ['Risk Vector Grade','風險面向等級','依特定風險面向的等級尋找弱項，再進入公司頁查看具體發現。'],
+  ['Infections','感染情況','篩選與惡意軟體感染等外部可觀測訊號相關的公司。'],
+  ['Open Ports','開放埠','尋找具有特定對外開放連接埠訊號的公司，需再核對資產與用途。'],
+  ['Public Disclosures','公開揭露','依公開揭露的事件或資料訊號縮小公司範圍。'],
+  ['Software','軟體','依偵測到或關聯的軟體尋找公司；不應單憑此認定存在弱點。'],
+  ['Service Provider','服務提供者','依共同使用的服務提供者探索第四方依賴。'],
+  ['Products','產品','依關聯產品找出可能受到同一產品影響的公司。'],
+  ['Product Type','產品類型','依產品分類縮小供應鏈或技術依賴範圍。']
+];
+
+const companyControls = [
+  ['Vendor Discovery','供應商探索','前往可能與組織有關聯、但尚待確認的公司探索頁。'],
+  ['Filters','篩選器','展開或收起篩選面板，組合多項條件縮小清單。'],
+  ['Columns','欄位','調整表格要顯示的欄位。'],
+  ['Views','檢視方式','切換已儲存的清單檢視。'],
+  ['Create View','建立檢視','把目前的欄位與篩選配置儲存為可重用檢視；儲存前確認分享範圍。'],
+  ['Reports','報表','從公司清單進入可用的報表操作；是否可用取決於選取狀態與權限。'],
+  ['Actions','動作','對選取的公司執行可用批次動作；執行前核對選取數量與對象。'],
+  ['Search','搜尋','搜尋清單中的公司或目前介面支援的文字欄位。'],
+  ['Download as CSV','下載 CSV','匯出目前可用的清單資料；匯出內容可能受篩選、欄位及權限影響。'],
+  ['Enter full screen','進入全螢幕','放大表格工作區，方便檢視更多欄位。'],
+  ['Select All','全選','選取目前清單中的公司以執行批次操作；留意是否只涵蓋目前頁。'],
+  ['Column options','欄位選項','從欄名旁的選單調整排序或欄位相關設定。'],
+  ['Prev / Next','上一頁／下一頁','在分頁結果間切換；頁尾可調整每頁筆數。']
+];
+
+const companyColumns = [
+  ['Company','公司','受監控公司的名稱；點選可進入單一公司的風險詳情。'],
+  ['Security Rating','安全評等','公司外部可觀測資安表現的分數，應搭配時間、風險面向與發現事項判讀。'],
+  ['Trend','趨勢','評等在選定期間的變化方向，不等同於目前分數高低。'],
+  ['Tier','層級','組織設定的供應商關鍵性分層，非 BitSight 自動推算的風險評等。'],
+  ['Relationship','關係','公司與組織的業務關係分類。'],
+  ['Subscription Type','訂閱類型','顯示目前對該公司的訂閱或監控型態。']
+];
+
+function companyPage(p){
+  const table=(headers,rows)=>`<div class="doc-table"><table><thead><tr>${headers.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return `<article class="doc"><button class="back-link" data-page="dashboard">← 返回儀表板</button><div class="eyebrow">投資組合風險 / Companies List</div><h1>公司清單</h1><p class="lead">Companies List 是受監控公司的工作清單。先確認範圍與篩選條件，再依評等、變化趨勢及供應商重要性找出要調查的公司；點選公司名稱後才進入個別風險詳情。</p><div class="callout"><strong>進入路徑</strong><br>左側選單 <code>Portfolio Risk → Companies List</code>。頁面頂端的公司範圍選擇器、左側 Filters，以及已儲存的 Views 都可能影響畫面結果。</div><h2>畫面怎麼看</h2><ol><li><strong>頁首：</strong>Companies List 標題旁有 Vendor Discovery、Reports、Actions。</li><li><strong>左側篩選面板：</strong>以 Folder、Tier、Security Rating 等條件縮小清單；多項條件同時套用時，結果可能變成零筆。</li><li><strong>表格工具列：</strong>可搜尋、調整欄位、切換檢視、建立檢視、匯出 CSV 或進入全螢幕。</li><li><strong>結果表格與頁尾：</strong>查看欄位、勾選公司、排序、調整每頁筆數和換頁。操作批次動作前應核對選取範圍。</li></ol><h2>預設表格欄位</h2>${table(['英文','中文','用途與判讀'],companyColumns)}<h2>篩選器完整對照</h2><p>目前可見的篩選面板包含以下 20 類。選項會隨授權、資料與帳號設定不同；下表說明篩選用途，不推定特定公司符合條件。</p>${table(['英文','建議中文','何時使用／注意'],companyFilters)}<h2>按鈕與工具</h2>${table(['英文','建議中文','功能'],companyControls)}<h2>常見操作情境</h2><div class="example"><strong>找出要優先檢查的關鍵供應商</strong><p>先選定正確資料夾或 All Companies，再以 Tier 縮小到關鍵層級，搭配較低 Security Rating 或下降的 Trend。開啟公司頁後核對風險面向、發現事項與資料時間，不只依分數排序。</p></div><div class="example"><strong>檢查聯絡資料缺口</strong><p>以 Has Contacts 找出尚無聯絡人的公司，再依 Tier 決定補齊順序。聯絡人屬於協作資料，不能從「沒有聯絡人」推論公司風險高。</p></div><div class="example"><strong>盤點共同技術依賴</strong><p>使用 Service Provider、Products 或 Software 篩選相關公司，建立待查清單；接著到第四方風險或個別公司頁確認關聯與實際曝險。</p></div><h2>建議操作流程</h2><ol><li>確認頁面標題為 Companies List，並核對頂端公司範圍。</li><li>查看是否已有 Folder、Views 或其他篩選條件；若結果為零，先檢查既有條件。</li><li>輸入公司名稱搜尋，或使用 Tier、Relationship、Security Rating 等條件逐步縮小範圍。</li><li>依目的調整 Columns；比較評等時同時顯示 Trend、Tier 與 Relationship。</li><li>點選公司名稱，進入個別公司頁核對評等時間、發現事項及資產證據。</li><li>如需匯出或批次動作，先核對公司選取範圍、權限與資料處理規範。</li></ol><h2>容易誤判的地方</h2><ul><li><strong>零筆結果不等於沒有公司：</strong>常見原因是資料夾、檢視或多重篩選限制。</li><li><strong>Tier 與 Security Rating 不同：</strong>前者是內部關鍵性分類，後者是外部可觀測資安評等。</li><li><strong>Trend 與目前分數不同：</strong>評等高的公司也可能正在下降，需看期間與變化幅度。</li><li><strong>技術關聯不等於存在弱點：</strong>Software、Products、Open Ports 等只提供調查線索。</li><li><strong>匯出資料可能敏感：</strong>CSV 可能包含供應商清單或內部分類，應依組織規範保存與分享。</li></ul><p class="note">本頁依 2026-09-17 可見的 BitSight Continuous Monitoring 介面整理。中文是教學用建議譯名，非官方譯文；網站不複製帳號內的公司名稱、數值或聯絡資料。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="fi-assessments"><strong>框架評估</strong><small>Assessments (FI) · 側欄下一個主題。</small></button><button class="feature-card" data-page="vendor-overview"><strong>供應商總覽</strong><small>Overview · 從清單進入單一公司的風險脈絡。</small></button></div></article>`;
+}
+
 function dashboardPage(p){
   return `<article class="doc"><button class="back-link" data-page="home">← 返回學習索引</button><div class="eyebrow">開始使用 / ${esc(p.en)}</div><h1>儀表板</h1><p class="lead">Portfolio Dashboard 是登入 Continuous Monitoring 後的投資組合總覽，用來快速發現「哪些公司或事件值得先調查」，再前往公司清單、弱點、警示或報表頁深入查證。</p><div class="callout"><strong>進入路徑</strong><br>左側主選單 <code>Dashboard</code>。頁面內容會受帳號授權、使用者權限、公司範圍、資料夾以及自訂卡片影響。</div><h2>頁面頂端與共用側欄</h2><div class="doc-table"><table><thead><tr><th>介面文字</th><th>中文與功能</th></tr></thead><tbody>${[['Continuous Monitoring','目前使用的產品／應用程式；可透過應用程式切換器切換其他 BitSight 產品。'],['All Companies','目前套用的公司範圍。切換範圍後，儀表板各卡片會依新範圍重新計算。'],['Notifications','通知中心，查看系統或監控相關通知。'],['Settings','帳號與平台相關設定入口；實際項目依權限而異。'],['Assistant','產品內協助入口。'],['30 Days','儀表板觀察期間。'],['Add Cards','加入新的資訊卡。'],['Edit Dashboard','調整、替換或移除現有資訊卡。']].map(([a,b])=>`<tr><td><strong>${a}</strong></td><td>${b}</td></tr>`).join('')}</tbody></table></div><h2>儀表板資訊卡</h2><div class="guide-cards">${dashboardCards.map(([en,zh,body])=>`<section class="guide-card"><strong>${esc(zh)}</strong><small>${esc(en)}</small><p>${esc(body)}</p></section>`).join('')}</div><h2>建議操作流程</h2><ol><li><strong>確認範圍：</strong>先看頂端公司選擇器是否為 All Companies，或是否已切換到特定資料夾。</li><li><strong>確認期間：</strong>選擇要觀察的天數；後續比較時要使用相同期間。</li><li><strong>先看風險矩陣：</strong>從高關鍵性且高風險的公司開始，依 Escalate、Review、Monitor 決定處理順序。</li><li><strong>查看異常變化：</strong>檢查 Rating Changes、Recent Security Incidents 與 Risk Vector Alerts，特別注意大幅下降或新事件。</li><li><strong>連回證據：</strong>從卡片前往 Companies List、Alerts 或 Vulnerability Detection，核對公司、資產、發現時間與證據。</li><li><strong>建立追蹤：</strong>依內部流程記錄負責人、處理狀態與下次檢查日期；不要只靠儀表板數字做最終判斷。</li></ol><div class="example"><strong>使用情境：每日風險巡檢</strong><p>先確認 Latest Updates 是否有新興事件影響受監控公司，再查看關鍵供應商是否出現評等下降或新警示。若某事件同時具高 CVSS／DVE Score 且 Companies Exposed 大於零，前往弱點詳情核對實際曝險證據。</p></div><div class="example"><strong>使用情境：主管月報</strong><p>固定使用相同公司範圍與期間，記錄 Median Rating、評等變化公司數、風險矩陣分布及重大事件。報告中應說明範圍與日期，避免把中位數當成所有供應商的表現。</p></div><h2>專有名詞與介面翻譯</h2><div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>功能與判讀</th></tr></thead><tbody>${dashboardTerms.map(([en,zh,note])=>`<tr><td><strong>${esc(en)}</strong></td><td>${esc(zh)}</td><td>${esc(note)}</td></tr>`).join('')}</tbody></table></div><h2>常見誤解與注意事項</h2><ul><li><strong>儀表板是摘要，不是完整證據：</strong>任何異常都應開啟對應公司、警示、風險面向或弱點頁核對。</li><li><strong>安全評等不等於公司一定遭入侵：</strong>評等與外部可觀測訊號用於風險排序，仍需結合內部調查與供應商回覆。</li><li><strong>搜尋熱度不等於風險：</strong>Trending Vendors 表示關注度增加，不能單獨作為升級供應商風險的理由。</li><li><strong>空白結果受條件影響：</strong>「No alerts available」或沒有事件，可能是範圍、期間或權限造成。</li><li><strong>自訂畫面可能不同：</strong>卡片可新增、替換及重排，所以不同使用者看到的順序未必一致。</li></ul><p class="note">以上名稱依目前可見的 BitSight Continuous Monitoring 介面整理；中文為教學用建議譯名，並非 BitSight 官方中文版。網站不保存或顯示帳號中的公司數值與名稱。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="companies"><strong>公司清單</strong><small>Companies List · 從整體摘要進入公司層級調查。</small></button><button class="feature-card" data-page="vulnerability"><strong>弱點偵測</strong><small>Vulnerability Detection · 追查新興事件與曝險公司。</small></button></div></article>`;
 }
@@ -164,6 +217,7 @@ function home(){
 }
 function page(p){
   if(p.id==='dashboard')return dashboardPage(p);
+  if(p.id==='companies')return companyPage(p);
   const d=details[p.id]||['認識功能','查看相關資訊。','依畫面提示進行操作。'];
   const related=groups.find(g=>g[0]===p.group)[1].filter(x=>x[0]!==p.id).slice(0,4);
   const terms=p.id==='companies'?uiTerms:[[p.en,p.zh]];
