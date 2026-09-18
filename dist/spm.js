@@ -174,6 +174,16 @@ const treeFilters = [
   ['Products','產品','依產品關聯篩選。'],
   ['Product Type','產品類型','縮小到特定產品分類。']
 ];
+const companyListColumns = [
+  ['Company','公司','公司名稱；點選後開啟該公司的 Company Details。'],
+  ['Company ID','公司識別碼','用於區分名稱相似的公司。'],
+  ['Primary Domain','主要網域','幫助核對公司識別與資產範圍。'],
+  ['Security Rating','資安評等','顯示目前評等；需結合日期與趨勢。'],
+  ['Trend','趨勢','觀察所選期間內評等變化。'],
+  ['Industry','產業','比較同業時先核對分類。'],
+  ['Sub-Industry','子產業','更細的產業分類。'],
+  ['Subscription Type','訂閱類型','例如 My Company、My Subsidiary，表示在 SPM 的監控身分。']
+];
 const nav = document.getElementById('nav');
 const main = document.getElementById('main');
 const crumb = document.getElementById('crumb');
@@ -210,6 +220,10 @@ function ratingsTreePage() {
   return `<article class="doc"><button class="back-link" data-page="risk-vectors">← 返回風險面向</button><div class="eyebrow">組織 Organization / Ratings Tree</div><h1>評等樹</h1><p class="lead">Ratings Tree 以樹狀層級呈現目前公司及相關組織的評等。這和 CM 的評等樹使用相同核心概念；SPM 頁面另外可檢視訂閱、IP 數量、節點資訊與多種篩選條件。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Ratings Tree</code>。先確認頁首 <code>Ratings Tree for …</code> 的公司，再判讀根節點與子節點。</div><h2>樹狀圖與節點</h2>${docTable(['介面文字','建議中文','怎麼判讀'],[['Primary Rating','主要評等','標示目前組織的主要評等節點；與子節點分數區分。'],['Basic / Advanced','基礎／進階','評等呈現層級，不是風險嚴重度。'],['Low Confidence','低信心度','關聯可信度標記；應核對該節點是否真的屬於組織。'],['Private / Self-Published','私人／自行公開','評等的可見或發布性質，不等於分數高低。'],['View Company','查看公司','前往該節點的公司詳情。'],['Subscribed','已訂閱','表示該節點已納入目前訂閱。'],['Monitored by','受監控數','平台上監控該公司的數量，不代表公司風險。'],['IP addresses','IP 位址數','該節點顯示的網路資產規模；需核對歸屬。'],['Subscription','訂閱','此節點的訂閱類別，例如 My Company 或 My Subsidiary。'],['More Details','更多詳情','展開公司描述、網站與產業等背景資訊。'],['Expand content / collapse content','展開／收合節點','檢視或隱藏該節點底下的組織。']])}<h2>工具列</h2>${docTable(['英文','建議中文','功能'],[['Show Filters / Hide Filters','顯示／隱藏篩選器','開啟或關閉左側篩選面板。'],['search','搜尋','查找樹中的公司；篩選面板也有自己的搜尋欄。'],['Collapse All','全部收合','縮小整棵樹，先觀察高層結構。'],['Zoom Slider','縮放滑桿','調整樹狀圖比例。'],['Reset scroll location','重設捲動位置','回到預設視角。'],['Views / Create View','檢視／建立檢視','管理常用的篩選組合；建立前先核對條件。']])}<h2>篩選器對照</h2><p>可見的篩選面板含以下 16 類；具體選項依帳號、資料與權限不同。</p>${docTable(['英文','建議中文','何時使用'],treeFilters)}<h2>建議操作流程</h2><ol><li>確認頁首的根公司；先按 <strong>Collapse All</strong> 看主要層級，再逐層展開。</li><li>點選節點檢查資安評等、Primary Rating、訂閱類型、IP addresses 和 Low Confidence 標記。</li><li>對可疑或不熟悉的節點，用 <strong>More Details</strong> 查公司描述、產業及網站；必要時開 <strong>View Company</strong> 進一步驗證。</li><li>需要找特定群組時，使用 Folder、Security Rating、Risk Vector Grade 等篩選；若結果消失，先檢查既有篩選。</li><li>記錄比較時的根公司、子節點、篩選條件與日期，不把不同節點分數混成同一筆結果。</li></ol><div class="example"><strong>使用情境：核對低信心度資產群</strong><p>若某子節點標示 Low Confidence，先檢查名稱、公司描述與 IP 範圍，再與內部資產清單對照。不要直接將其風險或分數算進總公司結論。</p></div><h2>容易誤判的地方</h2><ul><li><strong>樹上的上下層不一定是法律股權關係：</strong>可能是評等或技術範圍的分組，需查證實際關係。</li><li><strong>子節點分數不是根公司的分數：</strong>比較時要清楚指出節點與評等類型。</li><li><strong>IP 數量不是資產確權：</strong>外部可觀測資料可能受時差或歸屬判斷影響。</li><li><strong>篩選後樹可能不完整：</strong>畫面隱藏的節點不代表已刪除。</li></ul><p class="note">依 2026-09-18 可見的 SPM 評等樹整理；不複製帳號內公司名稱、數值或網站資料。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="company-list"><strong>我的公司清單</strong><small>My Company List · 核對公司集合。</small></button><button class="feature-card" data-page="subsidiaries"><strong>子公司</strong><small>Subsidiaries · 檢查組織關係。</small></button></div></article>`;
 }
 
+function companyListPage() {
+  return `<article class="doc"><button class="back-link" data-page="ratings-tree">← 返回評等樹</button><div class="eyebrow">組織 Organization / My Company List</div><h1>我的公司清單</h1><p class="lead">My Company List 是 SPM 中查找自身公司及子公司等受監控對象的表格。與 CM 的 Companies List 共用搜尋、篩選、欄位及匯出概念，但這裡的 Subscription Type 會呈現 SPM 組織身分。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → My Company List</code>。頁首 <code>My Company List for …</code> 表示目前所屬公司；搜尋與多項篩選會影響結果數。</div><h2>畫面區塊</h2><ol><li><strong>左側 Filters：</strong>以資料夾、評等、產業、風險面向等條件縮小清單；Columns 與 Views 管理顯示欄位及儲存檢視。</li><li><strong>表格工具列：</strong>顯示符合條件的公司數，並提供 Reports、Actions、Search、Download as CSV 和全螢幕。</li><li><strong>結果表格：</strong>預設可見 Company、Security Rating、Trend、Subscription Type；每列可勾選或開啟 Company Actions。</li><li><strong>分頁：</strong>可調整每頁筆數，並用 Prev／Next 瀏覽。批次操作前應留意目前頁及篩選範圍。</li></ol><h2>欄位對照</h2><p>頁面預設顯示部分欄位；按 Columns 可見以下一般欄位。中文譯法與 CM 相同的欄位保持一致。</p>${docTable(['英文','建議中文','用途與判讀'],companyListColumns)}<h2>篩選器對照</h2><p>此頁與 Ratings Tree 可見同一組 16 類篩選入口；選項及結果依帳號資料不同。</p>${docTable(['英文','建議中文','何時使用'],treeFilters)}<h2>按鈕與工具</h2>${docTable(['英文','建議中文','功能'],[['Columns','欄位','新增或移除表格欄位；Company 是固定欄位。'],['Views / Create View','檢視／建立檢視','儲存經常使用的篩選與欄位組合。'],['Search','搜尋','在目前清單中查找公司。'],['Select All / Select row','全選／選取單列','選擇目前結果進行批次操作；先核對範圍。'],['Company Actions','公司操作','開啟單一公司的可用操作。'],['Reports / Actions','報表／操作','頁首或清單的操作入口；未選取公司時，部分清單動作可能停用。'],['Download as CSV','下載 CSV','匯出目前清單資料，須遵守內部資料處理規範。'],['Enter full screen','進入全螢幕','擴大表格檢視空間。'],['Prev / Next','上一頁／下一頁','瀏覽分頁結果。']])}<h2>建議操作流程</h2><ol><li>確認目前公司與結果數，檢查是否已套用 Folder、Views 或其他篩選。</li><li>輸入公司名稱搜尋；如需比較，加入 Security Rating、Trend、Primary Domain 及 Subscription Type 欄位。</li><li>用 My Company／My Subsidiary 及產業等條件區分不同對象，再點公司名稱進入詳細頁。</li><li>需要匯出或批次處理時，先核對勾選對象、可見結果與資料處理權限。</li></ol><div class="example"><strong>使用情境：找出需要檢查的子公司</strong><p>先用 Subscription Type 縮小至子公司，再觀察 Security Rating 和 Trend。對變化明顯者進入 Company Details，確認風險面向與具體發現；不要僅依列表分數決定處置。</p></div><h2>容易誤判的地方</h2><ul><li><strong>零筆結果不等於沒有公司：</strong>可能是已儲存的 View、Folder 或多重篩選造成。</li><li><strong>訂閱類型不是風險分類：</strong>My Company、My Subsidiary 描述關係或監控身分，不等於安全等級。</li><li><strong>Trend 不能取代目前分數：</strong>評等較高但持續下降的公司仍值得調查。</li><li><strong>CSV 可能含敏感組織資料：</strong>分享及保存須遵守組織規範。</li></ul><p class="note">依 2026-09-18 可見的 SPM 公司清單整理；本導覽不複製帳號中的公司名稱、數值或識別碼。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="subsidiaries"><strong>子公司</strong><small>Subsidiaries · 管理組織範圍。</small></button><button class="feature-card" data-page="company-details"><strong>公司詳情</strong><small>Company Details · 深入單一公司。</small></button></div></article>`;
+}
+
 function topicPage(p) {
   const [path,focus,usage,caution] = details[p.id];
   const siblings = groups.find(([name]) => name===p.group)[1].filter(([id]) => id!==p.id).slice(0,4);
@@ -219,7 +233,8 @@ function topicPage(p) {
 function render() {
   const id = decodeURIComponent(location.hash.slice(1)) || 'home';
   const page = pages[id] || pages.home;
-  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : page.id==='company-details' ? companyDetailsPage() : page.id==='risk-vectors' ? riskVectorsPage() : page.id==='ratings-tree' ? ratingsTreePage() : topicPage(page);
+  const specialized = {'home':homePage,'dashboard':dashboardPage,'company-details':companyDetailsPage,'risk-vectors':riskVectorsPage,'ratings-tree':ratingsTreePage,'company-list':companyListPage};
+  main.innerHTML = specialized[page.id] ? specialized[page.id]() : topicPage(page);
   crumb.textContent = page.id==='home' ? '文件首頁' : `${page.group} / ${page.zh}`;
   renderNav(search.value);
   window.scrollTo(0,0);
