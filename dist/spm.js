@@ -156,6 +156,24 @@ const vectorGroups = [
     ['Other Disclosures','其他揭露','檢視其他公開資訊；畫面標 *，目前不影響評等。']
   ]]
 ];
+const treeFilters = [
+  ['Folder','資料夾','依已建立的公司群組縮小範圍。'],
+  ['Subscription Type','訂閱類型','區分不同監控或訂閱範圍。'],
+  ['Security Rating','資安評等','找出特定分數區間的節點。'],
+  ['Industry','產業','依公司產業篩選。'],
+  ['Country','國家／地區','依公司所在國家或地區篩選。'],
+  ['Self Published','自行公開','區分是否由公司自行公開評等。'],
+  ['Rating Type','評等類型','區分頁面中的評等類型。'],
+  ['Risk Vector Grade','風險面向等級','找出特定面向等級的公司。'],
+  ['Infections','感染訊號','篩選有關感染訊號的節點。'],
+  ['Vulnerabilities','弱點','篩選弱點相關節點。'],
+  ['Open Ports','開放埠','依對外開放的連接埠條件篩選。'],
+  ['Public Disclosures','公開揭露','依公開事件或揭露資訊篩選。'],
+  ['Software','軟體','依軟體線索篩選。'],
+  ['Service Provider','服務提供者','查看共同服務商關聯。'],
+  ['Products','產品','依產品關聯篩選。'],
+  ['Product Type','產品類型','縮小到特定產品分類。']
+];
 const nav = document.getElementById('nav');
 const main = document.getElementById('main');
 const crumb = document.getElementById('crumb');
@@ -188,6 +206,10 @@ function riskVectorsPage() {
   return `<article class="doc"><button class="back-link" data-page="company-details">← 返回公司詳情</button><div class="eyebrow">組織 Organization / Risk Vectors</div><h1>風險面向</h1><p class="lead">Risk Vectors Overview 將資安評等拆成可調查的類別。與 CM 相同的概念與譯名沿用；SPM 頁面另外提供各類權重、個別等級與相對位置，幫助安排改善順序。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Risk Vectors</code>。頁首會顯示目前公司；先核對公司與日期，再解讀等級及權重。</div><h2>四大類別與子面向</h2>${vectorGroups.map(([en,zh,items]) => `<h3>${esc(zh)} <small>${esc(en)}</small></h3>${docTable(['英文','建議中文','看什麼'],items)}`).join('')}<h2>畫面控制與標記</h2>${docTable(['介面文字','建議中文','判讀方式'],[['Overview','總覽','先查看風險類別、主要權重及圓餅圖，再選擇子面向。'],['Total weight / Weight','類別權重／面向權重','表示目前評等計算中的權重；不能直接當作風險發生機率。'],['Weight: Up to','最高可達的權重','受入侵系統相關面向的合計影響上限，不應把每項上限相加。'],['A–F / N/A','等級／不適用','個別風險面向的呈現，不是整家公司分數。'],['Top / Bottom 10–50%','相對位置','與比較群體的分布位置，需連同資料範圍解讀。'],['* Does not impact rating','* 目前不影響評等','仍可作為調查資訊，但不計入目前資安評等。'],['** Informational risk vector','** 資訊性風險面向','資訊性線索，永遠不影響資安評等。'],['Variable weight','變動權重','公開揭露類別沒有固定權重，部分事件可能影響評等。'],['Toggle navigation','切換子選單','收合或展開頁內風險面向導覽。'],['Copy … to URL','複製面向連結','取得指定子面向的定位連結，方便分享頁面位置。']])}<h2>建議操作流程</h2><ol><li>在 Overview 比較四大類，留意權重高且等級較弱的面向。</li><li>從左側頁內導覽點選具體子面向；分辨是 <strong>評等構成項</strong>、標 * 的目前不計分項，或標 ** 的資訊性項目。</li><li>連到對應的發現事項與資產，確認觀測時間及資產歸屬，再決定是否優先改善。</li><li>若需向他人說明，用 Copy … to URL 定位子面向，並一併提供公司、資料日期與明細證據。</li></ol><div class="example"><strong>使用情境：決定先處理哪個風險面向</strong><p>若某個高權重面向等級偏低，可先調查該面向的具體發現。權重只是評等計算資訊；實際順序還需考慮弱點可利用性、資產重要性與內部控制狀態。</p></div><h2>容易誤判的地方</h2><ul><li><strong>高權重不等於已發生事故：</strong>它表示對評等的相對影響，仍需查證發現事項。</li><li><strong>不計分不等於沒風險：</strong>標 * 或 ** 的面向仍可能值得內部追蹤。</li><li><strong>相對位置不是絕對安全：</strong>Top／Bottom 會受比較群體影響。</li><li><strong>權重可能調整：</strong>原介面及評等演算法更新時，應以當前顯示為準，不把本文件範例數值視為固定規則。</li></ul><p class="note">依 2026-09-18 可見的 SPM 風險面向頁整理。中文為教學譯名，非官方譯文；評級、權重及相對位置依公司及時間而變。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="ratings-tree"><strong>評等樹</strong><small>Ratings Tree · 核對組織範圍。</small></button><button class="feature-card" data-page="findings-table"><strong>發現事項表格</strong><small>Findings Table · 查證具體問題。</small></button></div></article>`;
 }
 
+function ratingsTreePage() {
+  return `<article class="doc"><button class="back-link" data-page="risk-vectors">← 返回風險面向</button><div class="eyebrow">組織 Organization / Ratings Tree</div><h1>評等樹</h1><p class="lead">Ratings Tree 以樹狀層級呈現目前公司及相關組織的評等。這和 CM 的評等樹使用相同核心概念；SPM 頁面另外可檢視訂閱、IP 數量、節點資訊與多種篩選條件。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Ratings Tree</code>。先確認頁首 <code>Ratings Tree for …</code> 的公司，再判讀根節點與子節點。</div><h2>樹狀圖與節點</h2>${docTable(['介面文字','建議中文','怎麼判讀'],[['Primary Rating','主要評等','標示目前組織的主要評等節點；與子節點分數區分。'],['Basic / Advanced','基礎／進階','評等呈現層級，不是風險嚴重度。'],['Low Confidence','低信心度','關聯可信度標記；應核對該節點是否真的屬於組織。'],['Private / Self-Published','私人／自行公開','評等的可見或發布性質，不等於分數高低。'],['View Company','查看公司','前往該節點的公司詳情。'],['Subscribed','已訂閱','表示該節點已納入目前訂閱。'],['Monitored by','受監控數','平台上監控該公司的數量，不代表公司風險。'],['IP addresses','IP 位址數','該節點顯示的網路資產規模；需核對歸屬。'],['Subscription','訂閱','此節點的訂閱類別，例如 My Company 或 My Subsidiary。'],['More Details','更多詳情','展開公司描述、網站與產業等背景資訊。'],['Expand content / collapse content','展開／收合節點','檢視或隱藏該節點底下的組織。']])}<h2>工具列</h2>${docTable(['英文','建議中文','功能'],[['Show Filters / Hide Filters','顯示／隱藏篩選器','開啟或關閉左側篩選面板。'],['search','搜尋','查找樹中的公司；篩選面板也有自己的搜尋欄。'],['Collapse All','全部收合','縮小整棵樹，先觀察高層結構。'],['Zoom Slider','縮放滑桿','調整樹狀圖比例。'],['Reset scroll location','重設捲動位置','回到預設視角。'],['Views / Create View','檢視／建立檢視','管理常用的篩選組合；建立前先核對條件。']])}<h2>篩選器對照</h2><p>可見的篩選面板含以下 16 類；具體選項依帳號、資料與權限不同。</p>${docTable(['英文','建議中文','何時使用'],treeFilters)}<h2>建議操作流程</h2><ol><li>確認頁首的根公司；先按 <strong>Collapse All</strong> 看主要層級，再逐層展開。</li><li>點選節點檢查資安評等、Primary Rating、訂閱類型、IP addresses 和 Low Confidence 標記。</li><li>對可疑或不熟悉的節點，用 <strong>More Details</strong> 查公司描述、產業及網站；必要時開 <strong>View Company</strong> 進一步驗證。</li><li>需要找特定群組時，使用 Folder、Security Rating、Risk Vector Grade 等篩選；若結果消失，先檢查既有篩選。</li><li>記錄比較時的根公司、子節點、篩選條件與日期，不把不同節點分數混成同一筆結果。</li></ol><div class="example"><strong>使用情境：核對低信心度資產群</strong><p>若某子節點標示 Low Confidence，先檢查名稱、公司描述與 IP 範圍，再與內部資產清單對照。不要直接將其風險或分數算進總公司結論。</p></div><h2>容易誤判的地方</h2><ul><li><strong>樹上的上下層不一定是法律股權關係：</strong>可能是評等或技術範圍的分組，需查證實際關係。</li><li><strong>子節點分數不是根公司的分數：</strong>比較時要清楚指出節點與評等類型。</li><li><strong>IP 數量不是資產確權：</strong>外部可觀測資料可能受時差或歸屬判斷影響。</li><li><strong>篩選後樹可能不完整：</strong>畫面隱藏的節點不代表已刪除。</li></ul><p class="note">依 2026-09-18 可見的 SPM 評等樹整理；不複製帳號內公司名稱、數值或網站資料。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="company-list"><strong>我的公司清單</strong><small>My Company List · 核對公司集合。</small></button><button class="feature-card" data-page="subsidiaries"><strong>子公司</strong><small>Subsidiaries · 檢查組織關係。</small></button></div></article>`;
+}
+
 function topicPage(p) {
   const [path,focus,usage,caution] = details[p.id];
   const siblings = groups.find(([name]) => name===p.group)[1].filter(([id]) => id!==p.id).slice(0,4);
@@ -197,7 +219,7 @@ function topicPage(p) {
 function render() {
   const id = decodeURIComponent(location.hash.slice(1)) || 'home';
   const page = pages[id] || pages.home;
-  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : page.id==='company-details' ? companyDetailsPage() : page.id==='risk-vectors' ? riskVectorsPage() : topicPage(page);
+  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : page.id==='company-details' ? companyDetailsPage() : page.id==='risk-vectors' ? riskVectorsPage() : page.id==='ratings-tree' ? ratingsTreePage() : topicPage(page);
   crumb.textContent = page.id==='home' ? '文件首頁' : `${page.group} / ${page.zh}`;
   renderNav(search.value);
   window.scrollTo(0,0);
