@@ -94,6 +94,34 @@ const cards = [
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const docTable = (headers, rows) => `<div class="doc-table"><table><thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${row.map(cell => `<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const companySections = [
+  ['Bitsight Security Rating','BitSight 資安評等','查看目前評等、評等層級、主要評等入口與評等樹連結；先確認公司與日期。'],
+  ['Risk of Security Incidents','資安事件風險','以頁面顯示的比較基準說明勒索軟體及資安事件的相對風險；不是事件已發生的證據。'],
+  ['Company Info','公司資訊','查看公司描述、訂閱類型、關係與其他背景資料；可用 Show Details 展開。'],
+  ['Security Ratings Changes','資安評等變化','閱讀歷史曲線、最高／最低點、升降分事件及 Why? 中的變化原因。'],
+  ['Infections','感染訊號','查看選定期間的名稱、嚴重度、首次觀測、變化與受影響主機數。'],
+  ['Vulnerabilities','弱點','查看弱點名稱、嚴重度、變化與受影響主機數；可從表格進一步查證。'],
+  ['Self-Attested Compliance','自行聲明的合規資訊','呈現組織自行聲明的框架與法規狀態；BitSight 不獨立驗證這些聲明。'],
+  ['Compromised Systems','疑似受入侵系統','彙整觀測到的惡意或不受歡迎軟體訊號、事件期間及處理速度比較。'],
+  ['Remediation Strategy','改善策略','列出可能影響評等的風險面向及估計分數空間，並提供發現事項與改善計畫入口。'],
+  ['Diligence','預防性措施','觀察組織採取預防措施相關的風險面向與紀錄分布。'],
+  ['Network Footprint','網路資產範圍','概覽對外可見的 IP 等基礎設施規模，作為資產盤點入口。']
+];
+const companyTerms = [
+  ['Rating Date / Effective Date','評等日期／生效日期','評等變化可能分別標示評定或生效時間；比較前先確認時間軸。'],
+  ['Why?','變化原因','展開評等升降的相關風險面向或事件；不能只看增減分。'],
+  ['Ratings Algorithm Update','評等演算法更新','表示方法變更可能影響分數；不一定是組織資產突然改變。'],
+  ['Risk Vector','風險面向','構成資安評等的觀測類別；與 CM 使用相同概念。'],
+  ['Severity','嚴重度','用於排列感染或弱點訊號；仍需連同資產與暴露情況判讀。'],
+  ['First Seen','首次觀測','系統第一次看見該訊號的時間，不必然是問題開始的時間。'],
+  ['Change','變化','所選期間內的變動；須核對基準和期間。'],
+  ['Impacted Hosts','受影響主機','觀測到受影響的主機數，不能直接推論所有內部設備。'],
+  ['Remediation Plan','改善計畫','從改善策略前往個別風險面向的追蹤工作。'],
+  ['Technology Industry Range and Median','科技產業範圍與中位數','提供產業比較基準；同行分布不代表適合自己的風險容忍度。'],
+  ['Portfolio Average','投資組合平均','頁面提供的比較基準，與目前公司的單獨表現不同。'],
+  ['Monitored by / Searched by','受監控／被搜尋','平台上的使用情況，不是公司資安品質指標。']
+];
 const nav = document.getElementById('nav');
 const main = document.getElementById('main');
 const crumb = document.getElementById('crumb');
@@ -118,6 +146,10 @@ function dashboardPage() {
   return `<article class="doc"><button class="back-link" data-page="home">← 返回學習索引</button><div class="eyebrow">開始使用 / Dashboard</div><h1>儀表板</h1><p class="lead">My Company Dashboard 是自身組織資安態勢的摘要。先找出評等、重大發現或基礎設施的異常變化，再前往明細查證。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Dashboard</code>。頁首公司的選擇器會影響目前的分析對象，卡片也可能因帳號設定不同而異。</div><h2>頁首與共用控制</h2><div class="doc-table"><table><thead><tr><th>英文</th><th>中文與功能</th></tr></thead><tbody>${[['Security Posture Management','產品切換器，目前所在應用程式。'],['Search Company, Domain, or Page Name','搜尋公司、網域或頁面名稱。'],['Notifications','平台通知入口。'],['Settings','帳號與平台設定入口，內容依權限不同。'],['Assistant','產品內協助入口。'],['Add Cards','加入新的儀表板卡片。'],['Edit Dashboard','調整或移除儀表板卡片。'],['Select','設定個別卡片的公司或顯示範圍；選項依卡片不同。']].map(([a,b]) => `<tr><td><strong>${a}</strong></td><td>${b}</td></tr>`).join('')}</tbody></table></div><h2>資訊卡對照</h2><div class="guide-cards">${cards.map(([en,zh,body]) => `<section class="guide-card"><strong>${esc(zh)}</strong><small>${esc(en)}</small><p>${esc(body)}</p></section>`).join('')}</div><h2>建議操作流程</h2><ol><li>確認頂端選取的公司，避免把不同實體的資料混在一起。</li><li>檢查卡片所用的時間範圍（例如 30 Days 或 90 Days）。</li><li>優先查看新增高優先／重大發現、評等變化與基礎設施變化。</li><li>點入發現事項、弱點偵測或基礎設施，核對證據、首次與最近觀測時間、資產歸屬。</li><li>需要追蹤時進入議題追蹤、風險改善或警示設定。</li></ol><div class="example"><strong>使用情境：每日巡檢</strong><p>先看 Latest Updates 是否有與組織相關的安全事件，再檢查 New High Priority Findings 和 Infrastructure Changes。任何重要變化都要回到明細，而不只憑卡片數字作結論。</p></div><h2>容易誤判的地方</h2><ul><li>儀表板是摘要，不等於完整證據；空白卡片也可能受期間、權限或公司選擇影響。</li><li>資安評等、CVSS 與 DVE Score 衡量的面向不同，不應直接互相比大小。</li><li>不同卡片可獨立選擇範圍，跨卡片比較時先核對公司與時間條件。</li></ul><p class="note">依 2026-09-18 可見的 SPM 儀表板整理；不複製帳號內公司名稱、分數或訊息。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="findings-table"><strong>發現事項表格</strong><small>Findings Table · 追查具體問題。</small></button><button class="feature-card" data-page="infrastructure"><strong>基礎設施</strong><small>Infrastructure · 核對資產歸屬。</small></button></div></article>`;
 }
 
+function companyDetailsPage() {
+  return `<article class="doc"><button class="back-link" data-page="home">← 返回學習索引</button><div class="eyebrow">組織 Organization / Company Details</div><h1>公司詳情</h1><p class="lead">Company Details 是 SPM 中單一公司的總覽頁。先確認目前選取的公司與評等期間，再從分數變化、弱點、感染訊號及資產範圍找出需要往下調查的問題。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Company Details</code>。頁首的 <code>Company Details for …</code> 指出目前公司；頁面上的數字與事件屬於該帳號的即時資料，本文件不複製。</div><h2>畫面怎麼看</h2><div class="guide-cards">${companySections.map(([en,zh,body]) => `<section class="guide-card"><strong>${esc(zh)}</strong><small>${esc(en)}</small><p>${esc(body)}</p></section>`).join('')}</div><h2>頁首與常用控制</h2>${docTable(['英文','建議中文','功能／判讀'],[['Reports','報表','從目前公司脈絡前往相關報表；產出前仍須確認範圍。'],['Actions','操作選單','目前公司可執行的動作入口；內容依帳號與權限不同。'],['Show Details','顯示詳情','展開公司背景資訊。'],['Select','選擇','調整評等變化等區塊的顯示條件。'],['View Ratings Tree','查看評等樹','前往組織節點及母子公司關係。'],['View Details','查看詳情','從摘要卡片進入對應的發現事項。'],['View Findings','查看發現事項','開啟影響評等的具體發現。'],['Remediation Plans','改善計畫','前往風險改善工作。']])}<h2>表格欄位與專有名詞</h2>${docTable(['原介面文字','建議中文','用途與注意'],companyTerms)}<h2>建議操作流程</h2><ol><li>確認頁首公司名稱、頂部公司選擇器與評等日期，避免在錯誤的組織範圍下判讀。</li><li>先看 <strong>Bitsight Security Rating</strong> 與 <strong>Security Ratings Changes</strong>；若分數改變，展開 <strong>Why?</strong> 核對是風險面向變化、具體事件，或演算法更新。</li><li>查看 <strong>Infections</strong> 和 <strong>Vulnerabilities</strong> 的觀測期間、嚴重度與受影響主機數，再點入明細。</li><li>對需要處理的問題，用 <strong>View Findings</strong> 確認資產與證據，必要時進入 <strong>Remediation Plans</strong> 追蹤改善。</li><li>若公司或 IP 範圍看起來不對，回到 <strong>Company Info</strong>、<strong>Network Footprint</strong> 與攻擊面頁核對歸屬。</li></ol><div class="example"><strong>使用情境：分數下降</strong><p>先固定公司與日期，閱讀評等變化清單的 Why?；若是某個 Risk Vector 下降，接著查看該面向與相應發現事項。若畫面標示 Ratings Algorithm Update，應先辨別方法變更與真實環境變化，不能直接把所有分數下降歸咎於新弱點。</p></div><div class="example"><strong>使用情境：向主管解釋風險</strong><p>用資安評等與趨勢說明整體態勢，但要列出關鍵發現、受影響資產及資料日期。Risk of Security Incidents 的倍數是比較風險訊號，不是「已發生事故」的證明；Self-Attested Compliance 則是組織自行聲明，不是 BitSight 審核結果。</p></div><h2>容易誤判的地方</h2><ul><li><strong>評等不等於事件：</strong>低評等或相對風險較高，不能直接推論已遭入侵。</li><li><strong>比較基準不同：</strong>產業中位數、投資組合平均與單一公司評等不能混用。</li><li><strong>受影響主機需查證：</strong>外部觀測可能受資產歸屬、資料延遲或可見範圍影響。</li><li><strong>估計改善分數不是保證：</strong>Remediation Strategy 的潛在影響以假設條件呈現，實際分數仍可能變動。</li><li><strong>自行聲明不是認證驗證：</strong>Self-Attested Compliance 不代表平台已獨立確認證書或法規符合性。</li></ul><p class="note">依 2026-09-18 可見的 SPM 公司詳情介面整理。中文為教學用建議譯名，非官方譯文；不同公司、授權與權限可能顯示不同卡片及資料。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="risk-vectors"><strong>風險面向</strong><small>Risk Vectors · 拆解評等構成。</small></button><button class="feature-card" data-page="findings-table"><strong>發現事項表格</strong><small>Findings Table · 核對具體證據。</small></button></div></article>`;
+}
+
 function topicPage(p) {
   const [path,focus,usage,caution] = details[p.id];
   const siblings = groups.find(([name]) => name===p.group)[1].filter(([id]) => id!==p.id).slice(0,4);
@@ -127,7 +159,7 @@ function topicPage(p) {
 function render() {
   const id = decodeURIComponent(location.hash.slice(1)) || 'home';
   const page = pages[id] || pages.home;
-  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : topicPage(page);
+  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : page.id==='company-details' ? companyDetailsPage() : topicPage(page);
   crumb.textContent = page.id==='home' ? '文件首頁' : `${page.group} / ${page.zh}`;
   renderNav(search.value);
   window.scrollTo(0,0);
