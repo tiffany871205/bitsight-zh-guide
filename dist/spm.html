@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bitsight SPM 繁體中文導覽</title>
+  <meta name="description" content="BitSight Security Posture Management (SPM) 繁體中文導覽：側欄翻譯、功能用途與儀表板閱讀方式。" />
+  <link rel="stylesheet" href="./spm.css?v=1" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand"><span class="mark">中</span><div><strong>Bitsight 中文導覽</strong><small>Security Posture Management</small><a class="switch" href="./index.html#home">← 切換至 Continuous Monitoring</a></div></div>
+      <nav aria-label="SPM 主題導覽">
+        <p class="nav-heading">開始使用</p>
+        <a href="#home">導覽首頁 <small>Home</small></a>
+        <a href="#dashboard">儀表板 <small>Dashboard</small></a>
+        <p class="nav-heading">SPM 側欄</p>
+        <a href="#organization">組織 <small>Organization</small></a>
+        <a href="#findings">發現事項 <small>Findings</small></a>
+        <a href="#attack-surface">攻擊面 <small>Attack Surface</small></a>
+        <a href="#action-plans">改善計畫 <small>Action Plans</small></a>
+        <a href="#peer-comparison">同業比較 <small>Peer Comparison</small></a>
+        <a href="#collaboration">協作 <small>Collaboration</small></a>
+        <a href="#alerts">警示 <small>Alerts</small></a>
+        <a href="#reports">報表 <small>Reports</small></a>
+        <a href="#integrations">整合 <small>Integrations</small></a>
+      </nav>
+      <p class="foot">獨立製作的學習範例<br>非 BitSight 官方中文文件</p>
+    </aside>
+    <div class="content">
+      <header class="topbar"><a href="./index.html#home">Continuous Monitoring</a><span>SPM 中文導覽</span></header>
+      <main>
+        <section id="home" class="intro">
+          <p class="eyebrow">SECURITY POSTURE MANAGEMENT / 學習索引</p>
+          <h1>從自身資安態勢開始</h1>
+          <p class="lead">這份繁體中文導覽整理 BitSight SPM 側欄的英文名稱、中文譯法與使用情境。先認識儀表板，再依問題進入對應功能。</p>
+          <div class="notice"><strong>閱讀前先知道</strong><br>這是獨立製作的教學文件，非 BitSight 官方文件，也不連接帳號或顯示即時資料。實際功能、畫面與可見資料可能因版本及權限不同而異。</div>
+          <h2>建議閱讀路徑</h2>
+          <div class="cards"><a href="#dashboard"><b>01</b><strong>掌握整體狀況</strong><span>先看儀表板中的評等、新發現與變化。</span></a><a href="#findings"><b>02</b><strong>確認具體問題</strong><span>從發現事項檢查證據與受影響範圍。</span></a><a href="#attack-surface"><b>03</b><strong>核對資產歸屬</strong><span>檢查暴露的外部資產是否屬於組織。</span></a><a href="#action-plans"><b>04</b><strong>安排改善追蹤</strong><span>把需要處理的項目帶進改善流程。</span></a></div>
+        </section>
+        <section id="dashboard">
+          <p class="eyebrow">DASHBOARD / 儀表板</p><h1>我的公司儀表板</h1>
+          <p class="lead">My Company Dashboard 彙整組織的評等、最新變化與待處理風險。適合每天快速巡檢；需要判斷原因時，應進入對應明細頁確認。</p>
+          <h2>畫面上的主要區塊</h2>
+          <div class="table-wrap"><table><thead><tr><th>英文名稱</th><th>中文與功能</th><th>什麼時候看</th></tr></thead><tbody>
+            <tr><td>Latest Updates</td><td>最新動態：彙整近期安全事件與消息。</td><td>開始每日巡檢，留意與自身環境有關的事件。</td></tr>
+            <tr><td>Bitsight Security Rating</td><td>BitSight 資安評等：顯示選定公司的評等概況。</td><td>觀察整體態勢；分數不是單一問題的處置優先序。</td></tr>
+            <tr><td>My Ratings Changes</td><td>我的評等變化：查看近期評等上升或下降的公司。</td><td>有分數變化時，進一步核對原因與期間。</td></tr>
+            <tr><td>New High Priority Findings</td><td>新增高優先事項：彙整新出現、需要優先確認的發現。</td><td>決定今天先調查哪些問題。</td></tr>
+            <tr><td>Infrastructure Changes</td><td>基礎設施變化：顯示近期觀測到的資產變動。</td><td>確認新資產或變動是否預期之內。</td></tr>
+            <tr><td>New Material/Severe Findings</td><td>新增重大／嚴重發現：聚焦影響較高的新問題。</td><td>進行風險分流及改善追蹤。</td></tr>
+            <tr><td>Alerts</td><td>警示：顯示已設定規則觸發的通知。</td><td>快速找出需要通知或回應的變化。</td></tr>
+            <tr><td>Collaboration Inbox</td><td>協作收件匣：查看與其他人或組織的往來事項。</td><td>追蹤待回覆的協作請求。</td></tr>
+          </tbody></table></div>
+          <h2>常見操作</h2><ol><li>確認頂部選取的公司及時間範圍，避免把不同對象或期間混在一起比較。</li><li>點入有變化的卡片，核對原始發現、資產及首次／最近觀測時間。</li><li>使用 <em>Add Cards</em> 新增所需卡片，或以 <em>Edit Dashboard</em> 調整版面；可用項目依權限而異。</li></ol>
+          <div class="notice">數值與圖表是入口，不等於已確認的弱點。對外報告前，請到明細頁驗證資料與資產歸屬。</div>
+        </section>
+        <section id="organization"><p class="eyebrow">ORGANIZATION</p><h1>組織</h1><p>Organization 用於查看與管理組織相關的資料及範圍。當評等或發現與預期不符時，先確認目前選取的公司與組織設定。</p></section>
+        <section id="findings"><p class="eyebrow">FINDINGS</p><h1>發現事項</h1><p>Findings 是檢查具體風險的入口。從儀表板看到新增或嚴重問題後，在此核對發現內容、受影響資產、證據與觀測時間，再決定是否需改善。</p></section>
+        <section id="attack-surface"><p class="eyebrow">ATTACK SURFACE</p><h1>攻擊面</h1><p>Attack Surface 用來理解對外可見的資產與暴露情況。適合核對新出現的主機、網域或其他外部資產是否屬於組織，以及是否需要納入治理。</p></section>
+        <section id="action-plans"><p class="eyebrow">ACTION PLANS</p><h1>改善計畫</h1><p>Action Plans 協助把已確認的問題轉成可追蹤的改善工作。適合整理處理順序、協調負責人並檢查後續變化；實際可用操作依帳號權限而定。</p></section>
+        <section id="peer-comparison"><p class="eyebrow">PEER COMPARISON</p><h1>同業比較</h1><p>Peer Comparison 用於比較自身與參考群體的相對資安態勢。比較時先確認群組與期間一致，並避免僅憑評等高低推論個別弱點。</p></section>
+        <section id="collaboration"><p class="eyebrow">COLLABORATION</p><h1>協作</h1><p>Collaboration 是與其他人或組織交換風險資訊、追蹤回應的入口。儀表板中的 Collaboration Inbox 可先提示待處理項目。</p></section>
+        <section id="alerts"><p class="eyebrow">ALERTS</p><h1>警示</h1><p>Alerts 用來查看或設定條件觸發的通知。適合持續監看評等、發現或資產變化；收到通知後仍需回到詳細資料確認。</p></section>
+        <section id="reports"><p class="eyebrow">REPORTS</p><h1>報表</h1><p>Reports 用來整理及分享指定範圍的資安態勢。產出前先核對公司、期間與收件對象，避免以不一致的條件比較。</p></section>
+        <section id="integrations"><p class="eyebrow">INTEGRATIONS</p><h1>整合</h1><p>Integrations 是查看可串接服務的入口。要導入既有工作流程時，可在此確認支援的連接方式與所需權限。</p></section>
+        <p class="closing">本導覽先建立 SPM 入口、儀表板與側欄主題；細部子頁會依實際介面逐一補充。</p>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
