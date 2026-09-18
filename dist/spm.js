@@ -184,6 +184,35 @@ const companyListColumns = [
   ['Sub-Industry','子產業','更細的產業分類。'],
   ['Subscription Type','訂閱類型','例如 My Company、My Subsidiary，表示在 SPM 的監控身分。']
 ];
+const findingColumns = [
+  ['Risk Vector','風險面向','這筆發現歸屬的資安風險類別。'],
+  ['Finding Identifier','發現識別值','辨識特定發現或資產的欄位；不能只用名稱推定影響範圍。'],
+  ['Details','詳情','進一步查看發現內容與證據。'],
+  ['First Seen','首次觀測','平台最早看見該訊號的日期，不一定是問題發生日期。'],
+  ['Last Seen','最近觀測','最近一次看見該訊號的日期；比對修復進度時很重要。'],
+  ['Impacts Risk Vector Grade','影響風險面向等級','指出發現是否影響該面向的等級，不等同公司總分的變化。'],
+  ['Grade','等級','該發現相關的面向或證據等級，需配合風險面向判讀。'],
+  ['Finding Severity','發現嚴重度','發現的嚴重程度，非資產重要性。'],
+  ['Asset Importance','資產重要性','資產優先順序線索，應與內部業務重要性核對。'],
+  ['Remaining Lifetime','剩餘有效期間','發現資料在平台上的剩餘生命週期，不是修復期限。'],
+  ['Attributed To','歸屬公司','平台將發現歸屬的公司；跨組織資產要核對。'],
+  ['Threat Insights','威脅洞察','是否有相關威脅情報。'],
+  ['Threat Activity Score','威脅活動分數','威脅活動的輔助排序訊號，不能取代內部驗證。'],
+  ['Remediation Instructions','改善指引','提供可能的處理方向；具體修復依內部環境確認。']
+];
+const findingFilters = [
+  ['Rating Impact','評等影響','找出影響公司評等的發現。'],
+  ['Grade','等級','按評等或風險面向等級縮小範圍。'],
+  ['Risk Vector','風險面向','聚焦某個風險類別。'],
+  ['Findings Tracking','發現追蹤','依處理或追蹤狀態查找。'],
+  ['Rescan Status','重新掃描狀態','檢查重新掃描進度。'],
+  ['Findings Impact','發現影響','篩選影響評等／面向等級的發現。'],
+  ['Finding Severity','發現嚴重度','先看較嚴重的問題。'],
+  ['First & Last Seen','首次／最近觀測','限制新發現或仍持續出現的問題。'],
+  ['Threat Insights','威脅洞察','尋找具威脅情報關聯的發現。'],
+  ['Assets','資產','鎖定特定網域、主機或其他資產。'],
+  ['Risk Vector Details','風險面向詳情','在風險類別下進一步縮小具體條件。']
+];
 const nav = document.getElementById('nav');
 const main = document.getElementById('main');
 const crumb = document.getElementById('crumb');
@@ -240,6 +269,10 @@ function badgePage() {
   return `<article class="doc"><button class="back-link" data-page="breach">← 返回資料外洩情報</button><div class="eyebrow">組織 Organization / Bitsight Badge</div><h1>BitSight 徽章</h1><p class="lead">Bitsight Badge 提供可嵌入網站的資安評等徽章與說明頁預覽。這涉及對外公開評等；變更分享設定或貼上嵌入碼前，應取得組織授權並確認網域。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Bitsight Badge</code>。本導覽只解釋功能，不會替你啟用分享、複製帳號專屬嵌入碼或修改允許網域。</div><h2>設定項目與介面翻譯</h2>${docTable(['英文','建議中文','功能與注意'],[['Enable Rating Sharing','啟用評等分享','控制是否允許對外展示；屬公開狀態變更，須事先核准。'],['Badges','徽章','設定網站嵌入式徽章的樣式與內容。'],['Landing Page','公開說明頁','預覽訪客看到的說明頁；可切換桌機、平板及手機尺寸。'],['Layout: Badge / Narrow / Wide','版型：徽章／窄版／寬版','調整嵌入內容的橫向配置。'],['Size: Large / Medium / Small','尺寸：大／中／小','調整徽章大小。'],['Embed Code','嵌入碼','帳號專屬的 HTML／Script 程式碼，供核准的網站使用。'],['COPY EMBED CODE','複製嵌入碼','把目前設定的嵌入碼複製到剪貼簿；貼上前須確認網站治理流程。'],['Badge configurations','徽章設定','選擇顯示的評等與比較資訊。'],['90-day Average','90 天平均','顯示過去 90 天平均評等，與當前評等不同。'],['Current Rating','目前評等','顯示當前評等；可能隨資料更新改變。'],['Show Industry Average','顯示產業平均','附上產業比較值，需確認比較範圍與資料日期。'],['Allowed Domains','允許的網域','限制哪些網站可使用嵌入碼；新增網域時使用完整 URL。'],['Save changes','儲存變更','正式套用設定；儲存前應檢查分享範圍及預覽。']])}<h2>使用前檢查</h2><ol><li>先取得資訊安全、法務或品牌團隊對公開評等的授權，確認可揭露的公司與數值範圍。</li><li>在 Badges 頁調整 Layout、Size、90-day Average 或 Current Rating，檢查預覽是否符合預期。</li><li>在 Landing Page 預覽 Desktop、Tablet、Mobile 的呈現；留意公開頁面的文字是否需要內部審核。</li><li>檢查 Allowed Domains 是否只有核准網站；不要把嵌入碼貼到非授權站點。</li><li>確認後才儲存變更及部署嵌入碼，並安排定期檢查徽章是否仍符合對外揭露政策。</li></ol><div class="example"><strong>使用情境：公司網站展示評等</strong><p>網站團隊先確認揭露政策和核准網域，再選擇顯示 90 天平均或目前評等。兩者不能混為同一數字；若顯示產業平均，頁面應保留來源與比較範圍說明。</p></div><h2>容易誤判的地方</h2><ul><li><strong>預覽不是授權：</strong>看得到徽章設定，不表示可對外發布。</li><li><strong>平均與目前值不同：</strong>90-day Average 可能與 Current Rating 有差異。</li><li><strong>嵌入碼與允許網域相關：</strong>在其他網域上可能無法顯示，亦不應繞過限制。</li><li><strong>評等會變動：</strong>公開網站需避免把當前分數表述成永久認證或合規證明。</li></ul><p class="note">依 2026-09-18 可見的 SPM 徽章頁整理；本文件不保存或顯示帳號專屬嵌入碼、允許網域或評等數值。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="findings-table"><strong>發現事項表格</strong><small>Findings Table · 下一個主題。</small></button><button class="feature-card" data-page="company-details"><strong>公司詳情</strong><small>Company Details · 核對評等來源。</small></button></div></article>`;
 }
 
+function findingsTablePage() {
+  return `<article class="doc"><button class="back-link" data-page="badge">← 返回 BitSight 徽章</button><div class="eyebrow">發現事項 Findings / Findings Table</div><h1>發現事項表格</h1><p class="lead">Findings Table 是從 SPM 摘要走向具體證據的主要入口。先固定公司與篩選條件，再看風險面向、資產、觀測時間和評等影響，最後決定是否追蹤或要求重新掃描。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Findings → Findings Table</code>。頁首的 <code>Findings for …</code> 指出目前公司；若只看到 0 筆，先檢查 Active Filters、已儲存 Views 與快速篩選按鈕。</div><h2>表格欄位</h2>${docTable(['英文','建議中文','用途與判讀'],findingColumns)}<h2>左側篩選器</h2><p>這 11 類篩選可共同作用；條件越多，結果越窄。左側的 Active Filters／Applied filters 顯示目前生效的設定。</p>${docTable(['英文','建議中文','何時使用'],findingFilters)}<h2>快速檢視與工具列</h2>${docTable(['英文','建議中文','功能／注意'],[['Impacts RV Grade Only','僅看影響面向等級','快速聚焦會影響風險面向等級的發現。'],['Active Filters / Clear All','已套用條件／清除全部','檢查或重設目前篩選；清除前先記錄需要保留的條件。'],['Columns / Views / Create View','欄位／檢視／建立檢視','設定表格欄位並保存常用篩選。'],['Search','搜尋','在目前結果中找資產或發現。'],['Select All / Select row','全選／選取單列','進行批次操作前核對公司、條件和頁數。'],['Update Status','更新狀態','記錄發現處理狀態；屬會改動原系統資料的操作。'],['Rescan','重新掃描','要求重新檢查選定發現；可用性依權限與資料而異。'],['Rescan Notifications Dropdown','重新掃描通知選單','查看重新掃描的通知相關選項。'],['Comment','留言','在單筆發現留下協作紀錄。'],['download table data as','下載表格資料','匯出目前清單；注意資產及風險資訊敏感性。'],['Enter full screen','進入全螢幕','擴大表格閱讀空間。']])}<h2>建議操作流程</h2><ol><li>確認頁首公司，以及 Active Filters、Views 和快速檢視是否仍生效。</li><li>依 Finding Severity、Rating Impact、Assets 或 Last Seen 縮小範圍。</li><li>先讀 Risk Vector、Finding Identifier、Details、First Seen／Last Seen 和 Attributed To，判斷資產是否屬於此公司。</li><li>把 Impacts Risk Vector Grade、Asset Importance 與 Threat Insights 作為優先排序的輔助訊號，不只看單一分數。</li><li>確定需要處理後，依內部流程使用 Update Status、Comment 或 Rescan，並記錄負責人與驗證時間。</li></ol><div class="example"><strong>使用情境：追查新發現</strong><p>先清楚標記時間條件，找出最近首次觀測的發現；再核對最近觀測、資產歸屬、嚴重度與威脅資訊。若已修復，但 Last Seen 尚未更新，先確認資料更新節奏，再評估是否需要重新掃描。</p></div><h2>容易誤判的地方</h2><ul><li><strong>零筆結果不等於零風險：</strong>可能是多個篩選、檢視或公司範圍造成。</li><li><strong>First Seen 不等於問題起始日：</strong>只是平台首次觀測時間。</li><li><strong>Impacts Risk Vector Grade 與總評等不同：</strong>面向等級變化不一定立即等於公司總分變化。</li><li><strong>Remaining Lifetime 不是 SLA：</strong>不能把平台資料生命週期當成內部修復期限。</li><li><strong>Rescan 不是修復：</strong>重新檢查只更新觀測，真正的修補仍需由資產負責團隊完成。</li></ul><p class="note">依 2026-09-18 可見的 SPM 發現事項表格整理；本導覽不複製帳號中的資產、發現識別值或處理紀錄。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="issue-tracking"><strong>議題追蹤</strong><small>Issue Tracking · 追蹤處理進度。</small></button><button class="feature-card" data-page="vulnerability"><strong>弱點偵測</strong><small>Vulnerability Detection · 聚焦弱點訊號。</small></button></div></article>`;
+}
+
 function topicPage(p) {
   const [path,focus,usage,caution] = details[p.id];
   const siblings = groups.find(([name]) => name===p.group)[1].filter(([id]) => id!==p.id).slice(0,4);
@@ -249,7 +282,7 @@ function topicPage(p) {
 function render() {
   const id = decodeURIComponent(location.hash.slice(1)) || 'home';
   const page = pages[id] || pages.home;
-  const specialized = {'home':homePage,'dashboard':dashboardPage,'company-details':companyDetailsPage,'risk-vectors':riskVectorsPage,'ratings-tree':ratingsTreePage,'company-list':companyListPage,'subsidiaries':subsidiariesPage,'assessments':assessmentsPage,'breach':breachPage,'badge':badgePage};
+  const specialized = {'home':homePage,'dashboard':dashboardPage,'company-details':companyDetailsPage,'risk-vectors':riskVectorsPage,'ratings-tree':ratingsTreePage,'company-list':companyListPage,'subsidiaries':subsidiariesPage,'assessments':assessmentsPage,'breach':breachPage,'badge':badgePage,'findings-table':findingsTablePage};
   main.innerHTML = specialized[page.id] ? specialized[page.id]() : topicPage(page);
   crumb.textContent = page.id==='home' ? '文件首頁' : `${page.group} / ${page.zh}`;
   renderNav(search.value);
