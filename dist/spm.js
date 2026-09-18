@@ -122,6 +122,40 @@ const companyTerms = [
   ['Portfolio Average','投資組合平均','頁面提供的比較基準，與目前公司的單獨表現不同。'],
   ['Monitored by / Searched by','受監控／被搜尋','平台上的使用情況，不是公司資安品質指標。']
 ];
+const vectorGroups = [
+  ['Compromised Systems','疑似受入侵系統',[
+    ['Botnet Infections','殭屍網路感染','觀察裝置參與殭屍網路的訊號。'],
+    ['Spam Propagation','垃圾郵件散播','觀察與垃圾郵件傳送相關的訊號。'],
+    ['Malware Servers','惡意軟體伺服器','觀察資產是否與惡意軟體散布相關。'],
+    ['Unsolicited Communications','未經請求的通訊','觀察異常或非預期對外通訊。'],
+    ['Potentially Exploited','可能遭利用','觀察可能已被利用的系統訊號。']
+  ]],
+  ['Diligence','預防性措施',[
+    ['SPF Domains','SPF 網域','檢查郵件來源授權設定。'],
+    ['DKIM Records','DKIM 紀錄','檢查郵件簽章設定。'],
+    ['DMARC','DMARC','檢查郵件驗證政策及回報設定。'],
+    ['TLS/SSL Certificates','TLS／SSL 憑證','檢查憑證有效性與管理狀態。'],
+    ['TLS/SSL Configurations','TLS／SSL 設定','檢查加密協定與配置。'],
+    ['Open Ports','開放埠','檢查對外暴露的連接埠。'],
+    ['Web Application Security','網站應用程式安全','檢查網站應用層的可觀測問題。'],
+    ['Critical Vulnerability Management','重大弱點管理','觀察重大弱點相關的管理表現。'],
+    ['Insecure Systems','不安全系統','檢查已知不安全的系統訊號。'],
+    ['Server Software','伺服器軟體','觀察伺服器軟體與版本相關風險。'],
+    ['Desktop Software','桌面端軟體','觀察桌面軟體相關風險。'],
+    ['Mobile Software','行動裝置軟體','觀察行動軟體相關風險。'],
+    ['DNSSEC','DNSSEC','檢查 DNS 安全簽章；畫面標 *，目前不影響評等。'],
+    ['Web Application Headers','網站應用程式標頭','檢查安全標頭；畫面標 *，目前不影響評等。'],
+    ['Domain Squatting','相似網域仿冒','觀察可能混淆的網域；畫面標 **，屬資訊性面向。']
+  ]],
+  ['User Behavior','使用者行為',[
+    ['File Sharing','檔案分享','觀察對外檔案分享相關訊號。'],
+    ['Exposed Credentials','外洩憑證','觀察憑證暴露線索；畫面標 **，屬資訊性面向。']
+  ]],
+  ['Public Disclosures','公開揭露',[
+    ['Security Incidents','資安事件','檢視公開揭露的資安事件；部分事件可能影響評等。'],
+    ['Other Disclosures','其他揭露','檢視其他公開資訊；畫面標 *，目前不影響評等。']
+  ]]
+];
 const nav = document.getElementById('nav');
 const main = document.getElementById('main');
 const crumb = document.getElementById('crumb');
@@ -150,6 +184,10 @@ function companyDetailsPage() {
   return `<article class="doc"><button class="back-link" data-page="home">← 返回學習索引</button><div class="eyebrow">組織 Organization / Company Details</div><h1>公司詳情</h1><p class="lead">Company Details 是 SPM 中單一公司的總覽頁。先確認目前選取的公司與評等期間，再從分數變化、弱點、感染訊號及資產範圍找出需要往下調查的問題。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Company Details</code>。頁首的 <code>Company Details for …</code> 指出目前公司；頁面上的數字與事件屬於該帳號的即時資料，本文件不複製。</div><h2>畫面怎麼看</h2><div class="guide-cards">${companySections.map(([en,zh,body]) => `<section class="guide-card"><strong>${esc(zh)}</strong><small>${esc(en)}</small><p>${esc(body)}</p></section>`).join('')}</div><h2>頁首與常用控制</h2>${docTable(['英文','建議中文','功能／判讀'],[['Reports','報表','從目前公司脈絡前往相關報表；產出前仍須確認範圍。'],['Actions','操作選單','目前公司可執行的動作入口；內容依帳號與權限不同。'],['Show Details','顯示詳情','展開公司背景資訊。'],['Select','選擇','調整評等變化等區塊的顯示條件。'],['View Ratings Tree','查看評等樹','前往組織節點及母子公司關係。'],['View Details','查看詳情','從摘要卡片進入對應的發現事項。'],['View Findings','查看發現事項','開啟影響評等的具體發現。'],['Remediation Plans','改善計畫','前往風險改善工作。']])}<h2>表格欄位與專有名詞</h2>${docTable(['原介面文字','建議中文','用途與注意'],companyTerms)}<h2>建議操作流程</h2><ol><li>確認頁首公司名稱、頂部公司選擇器與評等日期，避免在錯誤的組織範圍下判讀。</li><li>先看 <strong>Bitsight Security Rating</strong> 與 <strong>Security Ratings Changes</strong>；若分數改變，展開 <strong>Why?</strong> 核對是風險面向變化、具體事件，或演算法更新。</li><li>查看 <strong>Infections</strong> 和 <strong>Vulnerabilities</strong> 的觀測期間、嚴重度與受影響主機數，再點入明細。</li><li>對需要處理的問題，用 <strong>View Findings</strong> 確認資產與證據，必要時進入 <strong>Remediation Plans</strong> 追蹤改善。</li><li>若公司或 IP 範圍看起來不對，回到 <strong>Company Info</strong>、<strong>Network Footprint</strong> 與攻擊面頁核對歸屬。</li></ol><div class="example"><strong>使用情境：分數下降</strong><p>先固定公司與日期，閱讀評等變化清單的 Why?；若是某個 Risk Vector 下降，接著查看該面向與相應發現事項。若畫面標示 Ratings Algorithm Update，應先辨別方法變更與真實環境變化，不能直接把所有分數下降歸咎於新弱點。</p></div><div class="example"><strong>使用情境：向主管解釋風險</strong><p>用資安評等與趨勢說明整體態勢，但要列出關鍵發現、受影響資產及資料日期。Risk of Security Incidents 的倍數是比較風險訊號，不是「已發生事故」的證明；Self-Attested Compliance 則是組織自行聲明，不是 BitSight 審核結果。</p></div><h2>容易誤判的地方</h2><ul><li><strong>評等不等於事件：</strong>低評等或相對風險較高，不能直接推論已遭入侵。</li><li><strong>比較基準不同：</strong>產業中位數、投資組合平均與單一公司評等不能混用。</li><li><strong>受影響主機需查證：</strong>外部觀測可能受資產歸屬、資料延遲或可見範圍影響。</li><li><strong>估計改善分數不是保證：</strong>Remediation Strategy 的潛在影響以假設條件呈現，實際分數仍可能變動。</li><li><strong>自行聲明不是認證驗證：</strong>Self-Attested Compliance 不代表平台已獨立確認證書或法規符合性。</li></ul><p class="note">依 2026-09-18 可見的 SPM 公司詳情介面整理。中文為教學用建議譯名，非官方譯文；不同公司、授權與權限可能顯示不同卡片及資料。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="risk-vectors"><strong>風險面向</strong><small>Risk Vectors · 拆解評等構成。</small></button><button class="feature-card" data-page="findings-table"><strong>發現事項表格</strong><small>Findings Table · 核對具體證據。</small></button></div></article>`;
 }
 
+function riskVectorsPage() {
+  return `<article class="doc"><button class="back-link" data-page="company-details">← 返回公司詳情</button><div class="eyebrow">組織 Organization / Risk Vectors</div><h1>風險面向</h1><p class="lead">Risk Vectors Overview 將資安評等拆成可調查的類別。與 CM 相同的概念與譯名沿用；SPM 頁面另外提供各類權重、個別等級與相對位置，幫助安排改善順序。</p><div class="callout"><strong>進入路徑</strong><br>SPM 側欄 <code>Organization → Risk Vectors</code>。頁首會顯示目前公司；先核對公司與日期，再解讀等級及權重。</div><h2>四大類別與子面向</h2>${vectorGroups.map(([en,zh,items]) => `<h3>${esc(zh)} <small>${esc(en)}</small></h3>${docTable(['英文','建議中文','看什麼'],items)}`).join('')}<h2>畫面控制與標記</h2>${docTable(['介面文字','建議中文','判讀方式'],[['Overview','總覽','先查看風險類別、主要權重及圓餅圖，再選擇子面向。'],['Total weight / Weight','類別權重／面向權重','表示目前評等計算中的權重；不能直接當作風險發生機率。'],['Weight: Up to','最高可達的權重','受入侵系統相關面向的合計影響上限，不應把每項上限相加。'],['A–F / N/A','等級／不適用','個別風險面向的呈現，不是整家公司分數。'],['Top / Bottom 10–50%','相對位置','與比較群體的分布位置，需連同資料範圍解讀。'],['* Does not impact rating','* 目前不影響評等','仍可作為調查資訊，但不計入目前資安評等。'],['** Informational risk vector','** 資訊性風險面向','資訊性線索，永遠不影響資安評等。'],['Variable weight','變動權重','公開揭露類別沒有固定權重，部分事件可能影響評等。'],['Toggle navigation','切換子選單','收合或展開頁內風險面向導覽。'],['Copy … to URL','複製面向連結','取得指定子面向的定位連結，方便分享頁面位置。']])}<h2>建議操作流程</h2><ol><li>在 Overview 比較四大類，留意權重高且等級較弱的面向。</li><li>從左側頁內導覽點選具體子面向；分辨是 <strong>評等構成項</strong>、標 * 的目前不計分項，或標 ** 的資訊性項目。</li><li>連到對應的發現事項與資產，確認觀測時間及資產歸屬，再決定是否優先改善。</li><li>若需向他人說明，用 Copy … to URL 定位子面向，並一併提供公司、資料日期與明細證據。</li></ol><div class="example"><strong>使用情境：決定先處理哪個風險面向</strong><p>若某個高權重面向等級偏低，可先調查該面向的具體發現。權重只是評等計算資訊；實際順序還需考慮弱點可利用性、資產重要性與內部控制狀態。</p></div><h2>容易誤判的地方</h2><ul><li><strong>高權重不等於已發生事故：</strong>它表示對評等的相對影響，仍需查證發現事項。</li><li><strong>不計分不等於沒風險：</strong>標 * 或 ** 的面向仍可能值得內部追蹤。</li><li><strong>相對位置不是絕對安全：</strong>Top／Bottom 會受比較群體影響。</li><li><strong>權重可能調整：</strong>原介面及評等演算法更新時，應以當前顯示為準，不把本文件範例數值視為固定規則。</li></ul><p class="note">依 2026-09-18 可見的 SPM 風險面向頁整理。中文為教學譯名，非官方譯文；評級、權重及相對位置依公司及時間而變。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="ratings-tree"><strong>評等樹</strong><small>Ratings Tree · 核對組織範圍。</small></button><button class="feature-card" data-page="findings-table"><strong>發現事項表格</strong><small>Findings Table · 查證具體問題。</small></button></div></article>`;
+}
+
 function topicPage(p) {
   const [path,focus,usage,caution] = details[p.id];
   const siblings = groups.find(([name]) => name===p.group)[1].filter(([id]) => id!==p.id).slice(0,4);
@@ -159,7 +197,7 @@ function topicPage(p) {
 function render() {
   const id = decodeURIComponent(location.hash.slice(1)) || 'home';
   const page = pages[id] || pages.home;
-  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : page.id==='company-details' ? companyDetailsPage() : topicPage(page);
+  main.innerHTML = page.id==='home' ? homePage() : page.id==='dashboard' ? dashboardPage() : page.id==='company-details' ? companyDetailsPage() : page.id==='risk-vectors' ? riskVectorsPage() : topicPage(page);
   crumb.textContent = page.id==='home' ? '文件首頁' : `${page.group} / ${page.zh}`;
   renderNav(search.value);
   window.scrollTo(0,0);
