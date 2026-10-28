@@ -411,6 +411,9 @@ function render() {
   if(['peer-analytics','risk-position'].includes(page.id)){
     main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28').replaceAll('2026-09-21','2026-10-28');
   }
+  if(['collaboration','configured-alerts','alert-logs','infections','reports','integrations'].includes(page.id)){
+    main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28').replaceAll('2026-09-21','2026-10-28');
+  }
   if(page.id==='findings-table'){
     main.innerHTML=main.innerHTML.replace('<tr><td><strong>Impacts RV Grade Only</strong></td><td>僅看影響面向等級</td><td>快速聚焦會影響風險面向等級的發現。</td></tr>', '<tr><td><strong>Impacts RV Grade Only</strong></td><td>僅看影響面向等級</td><td>快速聚焦會影響風險面向等級的發現。</td></tr><tr><td><strong>Incubation Period Findings</strong></td><td>潛伏期發現</td><td>快速查看目前處於評等影響潛伏期的發現；實際影響仍以欄位與日期為準。</td></tr><tr><td><strong>Ask Bitsight AI</strong></td><td>詢問 Bitsight AI</td><td>用 AI 協助理解目前資料；回答應回到原始發現與證據核對。</td></tr>');
   }
