@@ -504,7 +504,7 @@ function portfolioAlertsPage(p){
 }
 
 function fourthAlertsPage(p){
-  const rows=[['Public Disclosures','公開揭露','目前頁面的第四方公開事件類型入口。'],['Breach Security Incident','資料外洩安全事件','可能涉及資料不當存取或外洩的事件分類。'],['General Security Incident','一般安全事件','不一定屬於資料外洩的安全事件。'],['Other Disclosure','其他揭露','其他公開揭露分類，需查看內容。'],['Date Range / Folders / Tiers','日期範圍／資料夾／層級','限制時間與第三方管理範圍。'],['Subscriptions Folder','訂閱資料夾','依訂閱分組縮小警示。'],['Date / Service Provider / Rating','日期／服務提供者／評等','辨識第四方及當前評等。'],['Category / Incident Type / Public Discovery','類別／事件類型／公開發現','釐清事件分類與公開資訊時間。'],['Folder / Companies','資料夾／公司數','查看受牽連的第三方範圍；數字需點入確認。'],['Alert Settings','警示設定','調整第四方事件提醒規則，不是警示歷史。']];
+  const rows=[['Public Disclosures','公開揭露','目前頁面的第四方公開事件類型入口。'],['Breach Security Incident','資料外洩安全事件','可能涉及資料不當存取或外洩的事件分類。'],['General Security Incident','一般安全事件','不一定屬於資料外洩的安全事件。'],['Other Disclosure','其他揭露','其他公開揭露分類，需查看內容。'],['Date Range / Folders / Tiers','日期範圍／資料夾／層級','限制時間與第三方管理範圍。'],['Subscriptions Folder','訂閱資料夾','依訂閱分組縮小警示。'],['Date / Service Provider / Rating','日期／服務提供者／評等','辨識第四方及當前評等；未訂閱時 Rating 欄可能顯示 Subscribe。'],['Subscribe','訂閱','將第四方加入可查看評等的訂閱範圍；這是帳號狀態變更，不是查看事件詳情。'],['Category / Incident Type / Public Discovery','類別／事件類型／公開發現','釐清事件分類與公開資訊時間。'],['Folder / Companies','資料夾／公司數','查看受牽連的第三方範圍；數字需點入確認。'],['Alert Settings','警示設定','調整第四方事件提醒規則，不是警示歷史。']];
   return `<article class="doc"><button class="back-link" data-page="portfolio-alerts">← 返回投資組合警示</button><div class="eyebrow">警示 / Fourth Party Alerts</div><h1>第四方警示</h1><p class="lead">Fourth Party Alerts 將第四方服務提供者的公開事件與所選第三方範圍連結，協助判斷哪幾家供應商可能間接受影響。看到事件不等於所有依賴公司都受害，必須查明關聯與實際影響。</p><div class="callout"><strong>進入路徑與目前畫面</strong><br>左側 <code>Alerts → Fourth Party Alerts</code>。本次頁面顯示 Public Disclosures、0 Rows；要先檢查期間、資料夾、Tier、訂閱與警示設定，不能推論沒有第四方事件。</div><h2>專有名詞與表格欄位</h2><div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>用途與判讀</th></tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><h2>清單工具</h2><ul><li><strong>Categories：</strong>依 Breach Security Incident、General Security Incident 或 Other Disclosure 篩選。</li><li><strong>Views、Create View：</strong>儲存常用調查範圍。</li><li><strong>Search、Download as CSV、Enter full screen：</strong>搜尋、匯出或放大；沒有資料時匯出停用。</li><li><strong>Companies：</strong>查看間接受影響的第三方；同一第四方事件可能關聯多家公司。</li></ul><h2>建議操作流程</h2><ol><li>確認目前選取的資料夾或 Tier，再檢查 Date Range、Categories 與 Views。</li><li>對新警示核對第四方名稱、事件來源、公開時間、分類及評等。</li><li>點開 Companies，列出間接受影響的第三方與具體依賴服務；區分直接受害與間接關聯。</li><li>向關鍵第三方詢問實際服務使用、資料影響、備援與事件應變進度。</li><li>按內部標準記錄通報、負責人與複查日期；必要時調整 Alert Settings。</li></ol><div class="example"><strong>使用情境：共用服務商發生事件</strong><p>先辨識事件是否為已公開揭露，再查受關聯的第三方及使用產品。若只是間接依賴，應標示「可能受影響、待確認」，避免直接寫成每家公司都已外洩。</p></div><h2>容易誤判的地方</h2><ul><li><strong>第四方事件與第三方事件不同：</strong>Companies 顯示間接關聯，不必然是直接受害公司。</li><li><strong>0 Rows 受範圍與規則影響：</strong>不能當作沒有供應鏈風險。</li><li><strong>評等不是事件影響度：</strong>需另查事件證據及服務依賴。</li></ul><p class="note">依 2026-09-17 可見介面及 BitSight 官方文件整理；中文為教學用建議譯名。</p><h2>參考資料</h2><ul><li><a href="https://help.bitsighttech.com/hc/en-us/articles/360052924933-Alert-Categories" target="_blank" rel="noopener noreferrer">BitSight：Alert Categories</a></li><li><a href="https://help.bitsighttech.com/hc/en-us/articles/14144501308567-GET-4th-Party-Public-Disclosure-Affected-Companies" target="_blank" rel="noopener noreferrer">BitSight：第四方事件受關聯公司</a></li><li><a href="https://help.bitsighttech.com/hc/en-us/articles/29670099422487-CM-App-Downloading-Alert-Details" target="_blank" rel="noopener noreferrer">BitSight：Downloading Alert Details</a></li></ul><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="reports"><strong>報表</strong><small>Reports · 側欄下一個主題。</small></button><button class="feature-card" data-page="fourth-overview"><strong>第四方總覽</strong><small>Overview · 查看共同依賴。</small></button></div></article>`;
 }
 
@@ -662,6 +662,16 @@ function show(id){
   const p=pages[current];
   crumb.textContent=current==='home'?'文件首頁':`${p.group} / ${p.zh}`;
   main.innerHTML=current==='home'?home():page(p);
+  if(current==='portfolio-alerts'){
+    main.innerHTML=main.innerHTML
+      .replace('本次畫面表格顯示 0 Rows，應先檢查範圍、期間及警示規則，不能直接推論沒有風險。','資料列數會隨範圍、期間及警示規則改變，不能只用目前列數推論是否存在風險。')
+      .replace('0 Rows 不是沒有風險：','空白結果不代表沒有風險：');
+  }
+  if(current==='fourth-alerts'){
+    main.innerHTML=main.innerHTML
+      .replace('本次頁面顯示 Public Disclosures、0 Rows；要先檢查期間、資料夾、Tier、訂閱與警示設定，不能推論沒有第四方事件。','由 Public Disclosures 查看清單；資料列數會隨期間、資料夾、Tier、訂閱與警示設定改變，不能只用目前列數推論是否存在第四方風險。')
+      .replace('0 Rows 受範圍與規則影響：','空白結果受範圍與規則影響：');
+  }
   main.querySelectorAll('[data-page="fi-assessments"],[data-page="framework"],[data-page="instant"]').forEach(link=>link.remove());
   renderNav(search.value);
   history.replaceState(null,'','#'+current);
