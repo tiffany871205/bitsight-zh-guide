@@ -5,7 +5,6 @@ const groups = [
   ]],
   ['投資組合風險', [
     ['companies','公司清單','Companies List','集中管理與查詢受監控的公司。'],
-    ['fi-assessments','框架評估','Assessments (FI)','查看與評估架構相關的資料。'],
     ['critical-assets','關鍵資產','Critical Assets','辨識需要優先關注的資產。'],
     ['compare','公司比較','Compare Companies','並排比較多家公司的風險資訊。'],
     ['discovery','供應商探索','Vendor Discovery','發現可能與組織有關聯的供應商。'],
@@ -48,7 +47,6 @@ const pages = Object.fromEntries(groups.flatMap(([group, items]) => items.map(([
 const details = {
   dashboard:['確認整體風險狀況','觀察評等、警示與趨勢，找出需要深入調查的公司。','點選摘要指標或圖表，進入對應的公司、警示或風險畫面。'],
   companies:['管理受監控公司','利用搜尋、資料夾、層級、關係、訂閱類型與安全評等篩選清單。','點選公司名稱，進入個別公司的風險頁面；可調整欄位或匯出清單。'],
-  'fi-assessments':['查看框架評估','整理與資安框架有關的評估資料，供風險審查時參考。','從清單選擇評估，確認狀態、對象與內容。'],
   'critical-assets':['優先處理關鍵資產','區分一般資產與業務上更重要的資產，讓調查順序更清楚。','篩選資產，查看相關公司與發現事項。'],
   compare:['比較多家公司','將評等及其他指標放在同一視角，協助選擇調查優先順序。','選擇公司後比較差異，並回到個別公司頁面追查。'],
   discovery:['辨識潛在供應商','查看系統發現的公司、關聯確定程度與相關性。','先檢查建議理由，再決定是否納入監控。'],
@@ -179,45 +177,6 @@ const companyColumns = [
   ['Relationship','關係','公司與組織的業務關係分類。'],
   ['Subscription Type','訂閱類型','顯示目前對該公司的訂閱或監控型態。']
 ];
-
-const assessmentFilters = [
-  ['Company','公司','只看特定公司的框架評估紀錄。'],
-  ['Status','狀態','依評估進度篩選；目前畫面已套用 Completed（已完成）。其他狀態選項需以實際資料為準。'],
-  ['User','使用者','依與評估紀錄相關的使用者縮小結果；實際角色意義應在紀錄詳情確認。'],
-  ['Date','日期','以日期條件尋找特定期間的評估。先確認篩選的是哪個日期欄位。'],
-  ['Framework','框架','只看指定資安框架或評估架構的紀錄。']
-];
-
-const assessmentColumns = [
-  ['Assessment Name','評估名稱','辨識同一公司不同評估或不同輪次的紀錄。'],
-  ['Company','公司','評估所對應的公司；不要只憑名稱判定涵蓋的法人或資產範圍。'],
-  ['Framework','框架','該紀錄採用的評估框架。比較結果前需確認框架與版本一致。'],
-  ['Status','狀態','評估目前的流程狀態；Completed 代表已完成，不等於全部控制項都符合要求。'],
-  ['Completed Date','完成日期','評估完成的時間。判斷證據是否仍適用時要看資料新舊。'],
-  ['User','使用者','表格呈現的相關使用者欄位；可能涉及建立、負責或操作人員，須看詳細資料確認。'],
-  ['Subscription Type','訂閱類型','評估所屬或可用的產品訂閱類型。'],
-  ['Compliance','符合情形','框架符合性相關結果；數值或標示的算法應以具體評估詳情為準。'],
-  ['Actions','動作','對單筆評估可執行的操作入口；內容可能受狀態與權限限制。']
-];
-
-const assessmentControls = [
-  ['Active Filters / Applied filters','使用中／已套用的篩選條件','查看目前哪些條件影響結果；本次畫面顯示 Completed。'],
-  ['Clear All / Clear','清除全部／清除單項','移除篩選條件後再檢查結果，避免把 0 筆誤判為沒有評估。'],
-  ['Columns','欄位','調整表格顯示的欄位。'],
-  ['Views','檢視方式','切換儲存的評估清單檢視。'],
-  ['Create View','建立檢視','將目前的篩選與欄位配置保存以供再次使用。'],
-  ['Save changes','儲存變更','在可編輯的檢視發生變更後保存；目前畫面為停用狀態。'],
-  ['Completed Assessments','已完成評估','目前顯示的檢視／範圍名稱，應搭配左側 Status 條件一起核對。'],
-  ['Search','搜尋','在目前清單範圍內搜尋可用欄位。'],
-  ['Enter full screen','進入全螢幕','放大評估表格的工作區。'],
-  ['Column options','欄位選項','開啟欄名旁的設定，例如該欄可用的排序或顯示操作。'],
-  ['Prev / Next','上一頁／下一頁','在有多頁結果時切換；目前 0 筆時會停用。']
-];
-
-function assessmentPage(p){
-  const table=(rows)=>`<div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>功能與判讀</th></tr></thead><tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
-  return `<article class="doc"><button class="back-link" data-page="companies">← 返回公司清單</button><div class="eyebrow">投資組合風險 / Assessments (FI)</div><h1>框架情報評估</h1><p class="lead">這頁在 BitSight 原介面標為 Framework Intelligence Assessments，用來按公司、框架、狀態、使用者與日期查找框架評估紀錄，並查看完成時間及符合情形。側欄的 Assessments (FI) 與 Vendor Risk 底下的 Assessments 位置不同，查找時應先確認所處模組。</p><div class="callout"><strong>進入路徑與目前畫面</strong><br>左側選單 <code>Portfolio Risk → Assessments (FI)</code>。本次可見的檢視為 <code>Completed Assessments</code>，左側套用 <code>Status: Completed</code>，表格顯示 <code>0 Rows / No results found</code>。這只描述目前的範圍與條件，不能推論帳號完全沒有評估紀錄。</div><h2>頁面結構</h2><ol><li><strong>篩選面板：</strong>查看 Active Filters，再用 Company、Status、User、Date、Framework 縮小範圍。</li><li><strong>檢視與欄位：</strong>Columns 可調整表格欄位，Views 與 Create View 用於管理常用清單配置。</li><li><strong>評估表格：</strong>每列代表一筆評估紀錄；先核對 Assessment Name、Company、Framework、Status，再判讀完成日期與符合情形。</li><li><strong>結果與分頁：</strong>Rows 顯示符合條件的筆數；有資料時可調整每頁筆數與換頁。</li></ol><h2>篩選器對照</h2>${table(assessmentFilters)}<h2>表格欄位對照</h2>${table(assessmentColumns)}<h2>按鈕與介面文字</h2>${table(assessmentControls)}<h2>建議操作流程</h2><ol><li>先核對頂端公司範圍，以及目前 Views／Completed Assessments 的選取狀態。</li><li>查看 Active Filters；若沒有結果，先檢查 Completed 是否排除了尚未完成的紀錄，再依需要清除或改變條件。</li><li>以 Company 或 Framework 縮小清單，避免混合不同公司或不同框架的評估。</li><li>有結果後，對照 Status、Completed Date 與 Compliance；若要判定是否符合控制要求，應開啟評估詳情核對問題、證據、例外與框架版本。</li><li>記錄審查日期、評估範圍與待補證據；不要只把清單中的狀態或符合情形當成最終結論。</li></ol><div class="example"><strong>使用情境：找出某供應商的最新完成評估</strong><p>選擇正確公司後保留 Completed 條件，再按 Completed Date 檢查近期紀錄；比較前確認 Framework 是否相同。若同一公司有多筆評估，不要把不同輪次的結果合併解讀。</p></div><div class="example"><strong>使用情境：清單為空時排查</strong><p>先看左側 Applied filters 與目前檢視名稱，必要時清除 Status 或日期限制，再確認公司範圍與權限。若仍為空，才向帳號管理者或評估負責人確認是否有可見紀錄。</p></div><h2>容易誤判的地方</h2><ul><li><strong>Completed 不等於合規：</strong>「完成」是流程狀態，Compliance 才是另一個結果欄位，且仍須檢查評估細節。</li><li><strong>0 Rows 不等於沒有評估：</strong>可能是 Completed、公司範圍、日期、檢視或權限限制。</li><li><strong>框架不同不宜直接比較：</strong>先確認 Framework、版本、適用範圍與完成日期。</li><li><strong>User 欄位不可直接推定責任：</strong>須查看評估詳情才知道該使用者的實際角色。</li></ul><p class="note">本頁依 2026-09-17 可見的 BitSight 介面整理。由於目前檢視沒有結果，未臆測單筆評估詳情、Compliance 算法或其他 Status 選項；中文為教學用建議譯名，非官方譯文。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="critical-assets"><strong>關鍵資產</strong><small>Critical Assets · 側欄下一個主題。</small></button><button class="feature-card" data-page="assessments"><strong>供應商評估</strong><small>Assessments · 對照 Vendor Risk 模組中的評估資訊。</small></button></div></article>`;
-}
 
 const criticalFilters = [
   ['Asset Type','資產類型','依網域、IP 等資產型態縮小清單。'],
@@ -665,7 +624,6 @@ function home(){
 function page(p){
   if(p.id==='dashboard')return dashboardPage(p);
   if(p.id==='companies')return companyPage(p);
-  if(p.id==='fi-assessments')return assessmentPage(p);
   if(p.id==='critical-assets')return criticalAssetsPage(p);
   if(p.id==='compare')return comparePage(p);
   if(p.id==='discovery')return discoveryPage(p);
@@ -705,6 +663,7 @@ function show(id){
   const p=pages[current];
   crumb.textContent=current==='home'?'文件首頁':`${p.group} / ${p.zh}`;
   main.innerHTML=current==='home'?home():page(p);
+  main.querySelectorAll('[data-page="fi-assessments"]').forEach(link=>link.remove());
   renderNav(search.value);
   history.replaceState(null,'','#'+current);
   document.getElementById('sidebar').classList.remove('open');
