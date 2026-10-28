@@ -402,8 +402,19 @@ function render() {
   if(['findings-table','issue-tracking','vulnerability'].includes(page.id)){
     main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28').replaceAll('2026-09-21','2026-10-28');
   }
+  if(['infrastructure','surface-analytics','work-from-home','cloud-sync','probable','third-party-assets'].includes(page.id)){
+    main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28').replaceAll('2026-09-21','2026-10-28');
+  }
   if(page.id==='findings-table'){
     main.innerHTML=main.innerHTML.replace('<tr><td><strong>Impacts RV Grade Only</strong></td><td>僅看影響面向等級</td><td>快速聚焦會影響風險面向等級的發現。</td></tr>', '<tr><td><strong>Impacts RV Grade Only</strong></td><td>僅看影響面向等級</td><td>快速聚焦會影響風險面向等級的發現。</td></tr><tr><td><strong>Incubation Period Findings</strong></td><td>潛伏期發現</td><td>快速查看目前處於評等影響潛伏期的發現；實際影響仍以欄位與日期為準。</td></tr><tr><td><strong>Ask Bitsight AI</strong></td><td>詢問 Bitsight AI</td><td>用 AI 協助理解目前資料；回答應回到原始發現與證據核對。</td></tr>');
+  }
+  if(page.id==='surface-analytics'){
+    const retiredRows=['Attack Surface Exposure','Display Confirmed Only','Severe / Material / Moderate','Evidence records'];
+    main.querySelectorAll('tr').forEach(row=>{if(retiredRows.some(label=>row.textContent.trim().startsWith(label)))row.remove();});
+    main.innerHTML=main.innerHTML
+      .replace('在 Attack Surface Exposure 比較嚴重度、證據紀錄數和 Confirmed Only 切換結果，再進入 CVE／發現明細。','將 Footprint 與 Security 卡片交叉比較後，再進入對應的資產或發現明細核對證據。')
+      .replace('<strong>證據紀錄數不等於弱點數：</strong>同一弱點可能有多筆證據。','<strong>卡片數量的單位不同：</strong>Asset Count、Material/Severe Findings 與產品數量不能直接互相比較。')
+      .replace('<strong>Confirmed Only 會改變範圍：</strong>比較前要記錄切換狀態與資料期間。','<strong>Ratings Tree 會影響範圍：</strong>本頁可能包含子公司資產，比較前先確認組織層級。');
   }
   if(page.id==='subsidiaries'){
     main.innerHTML=main.innerHTML
