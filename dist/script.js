@@ -406,6 +406,7 @@ const findingFilters = [
   ['Risk Vector Details','風險面向細節','按面向專屬資訊縮小清單。'],['Critical Assets','關鍵資產','聚焦已加入關鍵資產監控的對象。']
 ];
 const findingColumns = [
+  ['Ask Bitsight AI（工具列）','詢問 BitSight AI','針對目前清單啟動 AI 輔助分析；內容必須回到發現事項、資產與觀測時間人工核對。'],
   ['Risk Vector','風險面向','此發現所屬的 BitSight 面向。'],['Finding Identifier','發現識別資訊','辨識 IP、網域、主機、應用程式或連接埠等對象。'],
   ['Details','細節','簡述可觀測問題；開啟單筆詳情查看證據。'],['First Seen / Last Seen','首次／最近觀測','觀測日期，官方文件說明發現時間以 UTC 記錄。'],
   ['Impacts Risk Vector Grade','是否影響風險面向等級','是／否；與 Finding Severity 不同。'],['Grade','發現等級','該發現的品質或風險等級，不能當成整體公司評等。'],
@@ -427,6 +428,7 @@ const threatFilters = [
   ['Vulnerability','弱點','按關聯 CVE 或弱點縮小範圍。']
 ];
 const threatColumns = [
+  ['Threat Groups / Threat Behaviors','威脅團體／威脅行為','切換以威脅團體或行為模式查看情報；兩種檢視的欄位與篩選條件可能不同。'],
   ['Threat Groups / Type','威脅團體／類型','辨識團體與 APT、Ransomware 等分類。'],
   ['Geographies / Industries','地理區域／產業','團體已知關注的地區與產業；不代表目前選定公司一定是目標。'],
   ['Findings / Bad/Warn Findings','發現事項／不佳等級發現','點選數字前往與團體相關的公司發現，核對真正的資產證據。'],
