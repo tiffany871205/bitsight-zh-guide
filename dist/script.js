@@ -550,8 +550,8 @@ function invitationsPage(p){return conciseGuide(p,{
 
 function accessLinksPage(p){return conciseGuide(p,{
   back:'invitations',next:'contacts',lead:'Vendor Access Links 可產生供應商自行申請 BitSight 存取權的專用連結。連結應只提供給目前或潛在供應商，不可放上公開網站；申請與核准仍要依組織流程控管。',
-  path:'Collaboration → Vendor Access Links。頁首可見 Create Link，表格包含 Name、Description、Vendor Access Link、User、Date Created；本次畫面為 0 Links，未建立任何連結。',
-  terms:[['Create Link / Generate New Token','建立連結／產生新權杖','開啟建立視窗；按 Generate 才真正產生 URL。'],['Name / Description','名稱／說明','記錄連結用途及適用供應商群。'],['Vendor Access Link','供應商存取連結','可供供應商提出申請的 URL；需視為受控資訊。'],['User / Date Created','建立者／建立日期','追查誰建立、何時建立。'],['Vendor requested access token','供應商申請存取權杖','以該權杖識別從連結進來的申請。'],['Search / 0 Links','搜尋／連結數','查找既有連結；零筆只代表目前沒有清單記錄。']],
+  path:'Collaboration → Vendor Access Links。正常頁面可見 Create Link，表格包含 Name、Description、Vendor Access Link、User、Date Created；若清單未載入或顯示空白，需先檢查權限與工作階段，不能直接判定沒有連結。',
+  terms:[['Create Link / Generate New Token','建立連結／產生新權杖','開啟建立視窗；按 Generate 才真正產生 URL。'],['Name / Description','名稱／說明','記錄連結用途及適用供應商群。'],['Vendor Access Link','供應商存取連結','可供供應商提出申請的 URL；需視為受控資訊。'],['User / Date Created','建立者／建立日期','追查誰建立、何時建立。'],['Vendor requested access token','供應商申請存取權杖','以該權杖識別從連結進來的申請。'],['Search / Links','搜尋／連結數','查找既有連結；空白或零筆也可能受權限與載入狀態影響。']],
   steps:['確認是否有建立連結權限與業務需求，為不同用途設定可辨識的 Name、Description。','閱讀建立視窗的公開分享限制，確認發送管道只面向目前或潛在供應商。','產生後記錄建立者、建立日期及內部管理者；不要將實際 URL 放進公開文件或網站。','收到申請後到 Access Invitations 確認供應商身份、網域與核准狀態。','定期盤點連結用途及仍需有效的對象；若需停用，先核對影響範圍。'],
   example:'採購流程需要讓新供應商自行申請時，建立專用連結，透過受控郵件或供應商入口發送；收到申請後再依核准流程確認身份。',
   cautions:['建立視窗明確要求不要把 URL 發布在公開網站；本中文導覽絕不顯示或儲存真實連結。','有連結不等於已核准存取；申請仍須審核。','不要在多個無關專案混用連結，否則後續難以追蹤來源。'],
@@ -560,7 +560,7 @@ function accessLinksPage(p){return conciseGuide(p,{
 
 function contactsPage(p){return conciseGuide(p,{
   back:'access-links',next:'alert-settings',lead:'Vendor Contacts 用來維護供應商的業務或資安聯絡資料；Collaboration Contacts 則顯示供應商在協作計畫中指定的窗口。兩者用途不同，聯絡人資料應定期驗證並受控保存。',
-  path:'Collaboration → Vendor Contacts。頁面有 Vendor Contacts 與 Collaboration Contacts 兩個頁籤；本次兩頁籤皆為 0 Contacts，未輸入或上傳任何個資。',
+  path:'Collaboration → Vendor Contacts。正常頁面有 Vendor Contacts 與 Collaboration Contacts 兩個頁籤；若內容未載入或顯示空白，需先檢查公司範圍、權限與工作階段，不能直接判定沒有聯絡人。',
   terms:[['Vendor Contacts','供應商聯絡人','組織維護的供應商聯絡清單。'],['Collaboration Contacts','協作聯絡人','供應商指定的協作窗口，可能不公開姓名或電子郵件。'],['Company / Name / Email','公司／姓名／電子郵件','手動新增聯絡人的必填欄位。'],['Date Added','新增日期','用於追蹤資料多久未驗證。'],['Add Vendor Contact','新增供應商聯絡人','開啟表單；完成公司、姓名與郵件後才可新增。'],['Upload CSV','上傳 CSV','批次匯入聯絡人；應先核對格式、授權及重複資料。'],['Company / Folder / Tier','公司／資料夾／層級','依管理範圍查找聯絡人。'],['Search','搜尋','依目前頁籤查找清單。']],
   steps:['確認要維護的是 Vendor Contacts 還是檢視供應商指定的 Collaboration Contacts。','新增前向供應商確認姓名、職責、公司網域及聯絡用途，並核對個資處理依據。','手動新增時選正確公司，填寫 Name、Email；批次上傳前先清理 CSV 的重複與過期資料。','用 Company、Folder、Tier 篩選，定期複核離職、職務異動與無效信箱。','送協作邀請或事件通知前，再次確認收件者是否為適當窗口。'],
   example:'關鍵供應商發生事件時，先查 Vendor Contacts 的資安窗口，再確認 Collaboration Contacts 是否另有平台指定接收者，避免通知送到離職人員。',
@@ -570,17 +570,17 @@ function contactsPage(p){return conciseGuide(p,{
 
 function alertSettingsPage(p){return conciseGuide(p,{
   back:'contacts',next:'folders',lead:'Alert Settings 用來決定哪些公司範圍、哪些風險變化會產生警示，以及使用者是否收到郵件。設定頁與 Portfolio Alerts／Fourth Party Alerts 的歷史清單不同。',
-  path:'Portfolio Settings → Alert Settings。分為 Tiers and Folders 與 Alert Sets 兩頁籤；本次兩者均顯示 0 Rows，未變更任何規則。',
+  path:'Portfolio Settings → Alert Settings。分為 Tiers and Folders 與 Alert Sets 兩頁籤；若內容未載入或顯示空白，需先檢查權限與工作階段，不能直接判定沒有規則。',
   terms:[['Tiers and Folders','層級與資料夾','檢查各管理範圍套用的警示設定。'],['Alert Sets','警示集合','將警示類別與門檻組成可重用的規則。'],['Create Alert Set','建立警示集合','新增規則入口，操作前先確定範圍與權限。'],['Name / Description','名稱／說明','標示警示集合的用途。'],['Alert Set / Policy','警示集合／政策','查看各層級或資料夾套用的規則。'],['Email','電子郵件','目前使用者是否收到該範圍的警示郵件。'],['Created by / Shared','建立者／是否共用','確認規則所有權與共用範圍。'],['Actions','操作','可能提供編輯或管理，應先核對影響對象。']],
   steps:['先決定哪些 Tier、Folder 或訂閱需要監控，以及業務可接受的門檻與接收頻率。','在 Alert Sets 檢查或建立規則，明確命名並記錄類別、門檻與負責人。','回到 Tiers and Folders 確認規則套用到正確範圍、Policy 及 Email 狀態。','到 Portfolio Alerts 或 Fourth Party Alerts 驗證後續是否出現預期警示；注意產生可能有資料處理延遲。','定期清理重複規則和過期收件人，並保留設定變更紀錄。'],
   example:'對關鍵 Tier 設較嚴格的評等下降與重大事件警示，對較低關鍵性的供應商使用不同門檻；上線後觀察警示量與漏報情況再調整。',
-  cautions:['0 Rows 代表目前畫面沒有規則記錄，不代表監控公司沒有風險。','個人 Email 設定與組織共用 Alert Set 是不同層級，不能互相代替。','修改共用規則可能影響多位使用者；先確認權限與受影響範圍。'],
+  cautions:['空白或零筆可能是沒有規則、權限限制或載入狀態造成，不代表監控公司沒有風險。','個人 Email 設定與組織共用 Alert Set 是不同層級，不能互相代替。','修改共用規則可能影響多位使用者；先確認權限與受影響範圍。'],
   sources:[['BitSight：Alert Categories','https://help.bitsighttech.com/hc/en-us/articles/360052924933-Alert-Categories'],['BitSight：Permissions — Alerts, Notifications & Email','https://help.bitsighttech.com/hc/en-us/articles/28059398480023-Permissions-User-Settings-Alerts-Notifications-Email']]
 });}
 
 function foldersPage(p){return conciseGuide(p,{
   back:'alert-settings',next:'tiers',lead:'Folder Management 依業務、供應商類型或管理目的分組公司，方便篩選、比較及設定警示。資料夾是管理視圖，不是公司評等，也不等於 Tier。',
-  path:'Portfolio Settings → Folder Management。本次查看時原系統工作階段逾時，無法核對帳號內清單；以下為 BitSight 官方文件所列功能，未操作真實資料夾。',
+  path:'Portfolio Settings → Folder Management。清單內容會受權限與工作階段影響；以下功能依目前導覽入口與 BitSight 官方文件核對，未操作真實資料夾。',
   terms:[['Create a folder','建立資料夾','設定 Folder Name，可選填 Folder Description。'],['Folder Name / Description','資料夾名稱／說明','標示用途與收錄標準，方便日後管理。'],['# of Companies','公司數','此資料夾目前包含的公司數。'],['Average Rating / Median Rating','平均／中位評等','依畫面與版本標籤判讀群組評等，勿混用兩者。'],['Owner','擁有者','有權管理資料夾設定的人員。'],['Share Folder / Enable Sharing','分享資料夾／啟用分享','指定可見對象及 View、Manage Companies、Own 等權限。'],['Download / Filters / Search','下載／篩選／搜尋','匯出 CSV、依公司數或擁有者縮小清單。'],['Remove from Folder / Delete','移出資料夾／刪除','兩者影響不同，動作前應確認目標與權限。']],
   steps:['先定義分組目的與收錄標準，例如關鍵供應商、IT 服務或業務區域。','建立資料夾時填明確名稱與說明，避免和 Tier 或公司關係混淆。','從 Companies List 加入公司，再核對公司數及群組評等。','若需分享，選擇 All Users、Specific Users 或 Access Control Groups，給予最小必要權限。','定期檢查公司異動與警示規則；刪除資料夾前先確認相關報表、檢視和權限。'],
   example:'建立「關鍵支付供應商」資料夾，納入實際承接支付服務的公司，設定專用警示並僅分享給採購與資安管理者。',
@@ -590,7 +590,7 @@ function foldersPage(p){return conciseGuide(p,{
 
 function tiersPage(p){return conciseGuide(p,{
   back:'folders',next:'integrations',lead:'Tier Settings 依供應商對組織的重要性分層，並為每層設定評等風險門檻、評估與警示。Tier 是內部治理分類，不是 BitSight Security Rating 的高低分組。',
-  path:'Portfolio Settings → Tier Settings。本次原系統工作階段已逾時，無法核對帳號實際 Tier；以下依 BitSight 官方文件整理，未修改設定。',
+  path:'Portfolio Settings → Tier Settings。實際 Tier 內容會受權限與工作階段影響；以下依目前導覽入口與 BitSight 官方文件核對，未修改任何設定。',
   terms:[['Tier / Create Tier','層級／建立層級','最多可設定 5 個自訂層級並調整順序。'],['Global Tiers / Group Tiers','全域／群組層級','適用所有使用者，或限定 Access Control Group。'],['Tier Details','層級詳情','名稱、說明及收錄的公司；一家公司同時只能屬於一個 Tier。'],['Risk Thresholds','風險門檻','設定各 Tier 的資安評等門檻，影響風險矩陣與行動方案。'],['Assessment','評估','可把已上傳的評估自動關聯至此 Tier 公司。'],['Configure Alerts','設定警示','讓不同重要程度的供應商使用不同觸發規則。'],['Tier Recommender','層級建議器','提供建議供人工審查，非自動確定業務關鍵性。'],['Edit Tier / Delete Tier','編輯／刪除層級','會影響分類、報表與警示，操作前須評估。']],
   steps:['先與採購、業務和資安部門定義各 Tier 的資料敏感度、網路連線、營運依賴與中斷容忍度。','建立最多 5 層，為每層填名稱、說明與收錄標準，並按關鍵性排序。','從 Companies List 或 Vendor Overview 指派公司；確認同一家公司只屬於一個 Tier。','設定 Risk Thresholds、Assessment 與 Alerts，再到 Portfolio Risk Matrix 檢查結果。','定期複核供應商業務變化與 Tier Recommender 建議；調整前預估對報表和警示的影響。'],
   example:'將處理受管制個資且營運中斷會造成重大影響的供應商列為 Tier 1，設定較嚴格評等門檻與警示；一般低依賴服務則使用較低層級。',
