@@ -382,6 +382,16 @@ function render() {
   if(page.id==='dashboard'){
     main.innerHTML=main.innerHTML.replace('依 2026-09-18 可見的 SPM 儀表板整理；不複製帳號內公司名稱、分數或訊息。','依 2026-10-28 可見的 SPM 儀表板重新核對；卡片名稱與功能一致，不複製帳號內公司名稱、分數或訊息。');
   }
+  if(['company-details','risk-vectors','ratings-tree','company-list','subsidiaries','assessments','breach','badge'].includes(page.id)){
+    main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28');
+  }
+  if(page.id==='subsidiaries'){
+    main.innerHTML=main.innerHTML
+      .replace('先看 <code>Last Updated</code> 和 <code>Companies 已顯示數／總數</code>，確認資料日期及目前顯示的節點數。','先看 <code>Last Updated</code>、目前指標與時間範圍，確認資料日期及顯示範圍。')
+      .replace('看 Companies 的已顯示／總數；若要完整盤點，再考慮開啟 Show All Subsidiaries。','確認 Show All Subsidiaries 是否開啟；若要完整盤點，再考慮顯示所有子公司。')
+      .replace('<strong>顯示數不等於總數：</strong>畫面可能只呈現部分子公司；先看 Companies n／total。','<strong>顯示範圍可能不完整：</strong>未開啟 Show All Subsidiaries 時，畫面可能只呈現部分子公司。');
+    main.querySelectorAll('tr').forEach(row=>{if(row.textContent.trim().startsWith('Companies n / total'))row.remove();});
+  }
   crumb.textContent = page.id==='home' ? '文件首頁' : `${page.group} / ${page.zh}`;
   renderNav(search.value);
   window.scrollTo(0,0);
