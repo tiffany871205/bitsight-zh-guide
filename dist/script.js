@@ -12,8 +12,6 @@ const groups = [
   ]],
   ['供應商風險', [
     ['vendor-overview','總覽','Overview','整合單一供應商的風險概況。'],
-    ['framework','框架情報','Framework Intelligence','查看與資安框架有關的資訊。'],
-    ['instant','即時洞察','Instant Insights','快速理解供應商的主要風險訊號。'],
     ['assessments','評估','Assessments','查看與管理供應商評估。'],
     ['vectors','風險面向','Risk Vectors','按風險類別檢視評等構成。'],
     ['findings','發現事項','Findings','追查具體的資安發現。'],
@@ -52,8 +50,6 @@ const details = {
   discovery:['辨識潛在供應商','查看系統發現的公司、關聯確定程度與相關性。','先檢查建議理由，再決定是否納入監控。'],
   expired:['檢查監控中斷','找出到期訂閱，避免因監控期限結束而失去追蹤。','確認公司與到期資訊，再按內部流程處理續訂。'],
   'vendor-overview':['閱讀單一供應商概況','將評等、趨勢與風險資訊集中呈現。','從公司清單選一家公司後，依需要切換左側子頁。'],
-  framework:['對照資安框架','以框架角度整理與供應商相關的資安資料。','查看適用的評估與項目，記錄後續要確認的問題。'],
-  instant:['快速掌握重點','把值得注意的風險訊號彙整成可優先閱讀的摘要。','從摘要選一項訊號，回到原始資訊確認細節。'],
   assessments:['檢視評估紀錄','集中查看供應商評估及狀態。','選擇評估、檢查回覆或結果，並記錄待追蹤事項。'],
   vectors:['拆解評等構成','按風險面向理解總評等背後的差異。','選擇評分較弱的面向，再往發現事項追查。'],
   findings:['追查具體問題','查看可觀測到的資安發現及其細節。','運用篩選縮小範圍，核對問題、時間與相關資產。'],
@@ -632,8 +628,6 @@ function page(p){
   if(p.id==='discovery')return discoveryPage(p);
   if(p.id==='expired')return expiredPage(p);
   if(p.id==='vendor-overview')return vendorOverviewPage(p);
-  if(p.id==='framework')return frameworkPage(p);
-  if(p.id==='instant')return instantPage(p);
   if(p.id==='assessments')return vendorAssessmentPage(p);
   if(p.id==='vectors')return vectorPage(p);
   if(p.id==='findings')return findingsPage(p);
@@ -666,7 +660,7 @@ function show(id){
   const p=pages[current];
   crumb.textContent=current==='home'?'文件首頁':`${p.group} / ${p.zh}`;
   main.innerHTML=current==='home'?home():page(p);
-  main.querySelectorAll('[data-page="fi-assessments"]').forEach(link=>link.remove());
+  main.querySelectorAll('[data-page="fi-assessments"],[data-page="framework"],[data-page="instant"]').forEach(link=>link.remove());
   renderNav(search.value);
   history.replaceState(null,'','#'+current);
   document.getElementById('sidebar').classList.remove('open');
