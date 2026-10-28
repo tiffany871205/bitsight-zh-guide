@@ -187,17 +187,31 @@ const companyListColumns = [
 const findingColumns = [
   ['Risk Vector','風險面向','這筆發現歸屬的資安風險類別。'],
   ['Finding Identifier','發現識別值','辨識特定發現或資產的欄位；不能只用名稱推定影響範圍。'],
+  ['Tags','標籤','用既有標籤整理與篩選發現；標籤本身不代表風險高低。'],
+  ['Remediation Status','改善狀態','顯示目前處理階段，例如未設定、待處理、處理中或已解決。'],
+  ['Status Updated','狀態更新時間','最近一次變更改善狀態的時間。'],
+  ['Updated By','更新者','最近更新狀態或紀錄的使用者。'],
+  ['Assigned To','負責人','目前被指派處理或追蹤此發現的人員。'],
   ['Details','詳情','進一步查看發現內容與證據。'],
   ['First Seen','首次觀測','平台最早看見該訊號的日期，不一定是問題發生日期。'],
   ['Last Seen','最近觀測','最近一次看見該訊號的日期；比對修復進度時很重要。'],
+  ['Rescan Status','重新掃描狀態','顯示重新掃描要求及處理進度；不是修復結果本身。'],
+  ['Impacts Security Rating','影響資安評等','指出是否會影響公司整體資安評等。'],
   ['Impacts Risk Vector Grade','影響風險面向等級','指出發現是否影響該面向的等級，不等同公司總分的變化。'],
+  ['Impact End Date','影響結束日','目前評等影響預計停止的日期；仍需配合觀測狀態判讀。'],
   ['Grade','等級','該發現相關的面向或證據等級，需配合風險面向判讀。'],
   ['Finding Severity','發現嚴重度','發現的嚴重程度，非資產重要性。'],
   ['Asset Importance','資產重要性','資產優先順序線索，應與內部業務重要性核對。'],
   ['Remaining Lifetime','剩餘有效期間','發現資料在平台上的剩餘生命週期，不是修復期限。'],
+  ['No Impact End Date','不影響結束日','不影響評等狀態的預計結束日期，需配合影響欄位一起看。'],
   ['Attributed To','歸屬公司','平台將發現歸屬的公司；跨組織資產要核對。'],
   ['Threat Insights','威脅洞察','是否有相關威脅情報。'],
+  ['Threat Groups','威脅群組','顯示與發現相關的威脅行為者或群組線索。'],
   ['Threat Activity Score','威脅活動分數','威脅活動的輔助排序訊號，不能取代內部驗證。'],
+  ['Assets','資產','列出與發現相關的網域、主機或其他資產。'],
+  ['Comments','留言','查看協作與處理紀錄；不可取代正式證據。'],
+  ['Country','國家／地區','平台判定的地理資訊，可能受 IP 登記或定位資料影響。'],
+  ['Rolled Up ID','彙整識別碼','用來識別平台彙整後的相關發現群組。'],
   ['Remediation Instructions','改善指引','提供可能的處理方向；具體修復依內部環境確認。']
 ];
 const findingFilters = [
@@ -384,6 +398,12 @@ function render() {
   }
   if(['company-details','risk-vectors','ratings-tree','company-list','subsidiaries','assessments','breach','badge'].includes(page.id)){
     main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28');
+  }
+  if(['findings-table','issue-tracking','vulnerability'].includes(page.id)){
+    main.innerHTML=main.innerHTML.replaceAll('2026-09-18','2026-10-28').replaceAll('2026-09-21','2026-10-28');
+  }
+  if(page.id==='findings-table'){
+    main.innerHTML=main.innerHTML.replace('<tr><td><strong>Impacts RV Grade Only</strong></td><td>僅看影響面向等級</td><td>快速聚焦會影響風險面向等級的發現。</td></tr>', '<tr><td><strong>Impacts RV Grade Only</strong></td><td>僅看影響面向等級</td><td>快速聚焦會影響風險面向等級的發現。</td></tr><tr><td><strong>Incubation Period Findings</strong></td><td>潛伏期發現</td><td>快速查看目前處於評等影響潛伏期的發現；實際影響仍以欄位與日期為準。</td></tr><tr><td><strong>Ask Bitsight AI</strong></td><td>詢問 Bitsight AI</td><td>用 AI 協助理解目前資料；回答應回到原始發現與證據核對。</td></tr>');
   }
   if(page.id==='subsidiaries'){
     main.innerHTML=main.innerHTML
