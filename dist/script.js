@@ -5,13 +5,17 @@ const groups = [
   ]],
   ['投資組合風險', [
     ['companies','公司清單','Companies List','集中管理與查詢受監控的公司。'],
+    ['fi-assessments','框架評估','Assessments (FI)','跨公司查看 Framework Intelligence 評估。'],
     ['critical-assets','關鍵資產','Critical Assets','辨識需要優先關注的資產。'],
+    ['risk-analytics','風險分析','Risk Analytics','分析投資組合的事件與勒索軟體相對風險。'],
     ['compare','公司比較','Compare Companies','並排比較多家公司的風險資訊。'],
     ['discovery','供應商探索','Vendor Discovery','發現可能與組織有關聯的供應商。'],
     ['expired','到期訂閱','Expired Subscriptions','查看已到期的監控訂閱。']
   ]],
   ['供應商風險', [
     ['vendor-overview','總覽','Overview','整合單一供應商的風險概況。'],
+    ['framework','框架情報','Framework Intelligence','以文件和資安框架檢查單一供應商。'],
+    ['instant','即時洞察','Instant Insights','用 AI 協助初讀供應商 SOC 2 報告。'],
     ['assessments','評估','Assessments','查看與管理供應商評估。'],
     ['vectors','風險面向','Risk Vectors','按風險類別檢視評等構成。'],
     ['findings','發現事項','Findings','追查具體的資安發現。'],
@@ -45,11 +49,15 @@ const pages = Object.fromEntries(groups.flatMap(([group, items]) => items.map(([
 const details = {
   dashboard:['確認整體風險狀況','觀察評等、警示與趨勢，找出需要深入調查的公司。','點選摘要指標或圖表，進入對應的公司、警示或風險畫面。'],
   companies:['管理受監控公司','利用搜尋、資料夾、層級、關係、訂閱類型與安全評等篩選清單。','點選公司名稱，進入個別公司的風險頁面；可調整欄位或匯出清單。'],
+  'fi-assessments':['查看框架評估','整理跨公司的 Framework Intelligence 評估紀錄。','從清單選擇評估，確認公司、框架、狀態與完成日期。'],
   'critical-assets':['優先處理關鍵資產','區分一般資產與業務上更重要的資產，讓調查順序更清楚。','篩選資產，查看相關公司與發現事項。'],
+  'risk-analytics':['分析投資組合風險','比較安全事件與勒索軟體的相對風險分布及歷史變化。','先核對公司範圍，再閱讀今日與歷史檢視。'],
   compare:['比較多家公司','將評等及其他指標放在同一視角，協助選擇調查優先順序。','選擇公司後比較差異，並回到個別公司頁面追查。'],
   discovery:['辨識潛在供應商','查看系統發現的公司、關聯確定程度與相關性。','先檢查建議理由，再決定是否納入監控。'],
   expired:['檢查監控中斷','找出到期訂閱，避免因監控期限結束而失去追蹤。','確認公司與到期資訊，再按內部流程處理續訂。'],
   'vendor-overview':['閱讀單一供應商概況','將評等、趨勢與風險資訊集中呈現。','從公司清單選一家公司後，依需要切換左側子頁。'],
+  framework:['檢查框架情報','把單一供應商的文件對照資安框架。','確認公司與框架版本，再核對控制項及證據。'],
+  instant:['初讀 SOC 2 文件','以 AI 摘要協助找出報告範圍、意見與例外。','上傳前先確認文件分享權限，輸出須回到原文人工驗證。'],
   assessments:['檢視評估紀錄','集中查看供應商評估及狀態。','選擇評估、檢查回覆或結果，並記錄待追蹤事項。'],
   vectors:['拆解評等構成','按風險面向理解總評等背後的差異。','選擇評分較弱的面向，再往發現事項追查。'],
   findings:['追查具體問題','查看可觀測到的資安發現及其細節。','運用篩選縮小範圍，核對問題、時間與相關資產。'],
@@ -173,6 +181,42 @@ const companyColumns = [
   ['Relationship','關係','公司與組織的業務關係分類。'],
   ['Subscription Type','訂閱類型','顯示目前對該公司的訂閱或監控型態。']
 ];
+
+const guideTable=(rows)=>`<div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>功能與判讀</th></tr></thead><tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+
+const fiAssessmentTerms = [
+  ['Company','公司','只看特定公司的框架評估紀錄。'],
+  ['Status','狀態','依評估進度篩選；Completed 代表流程完成，不等於所有控制項均符合。'],
+  ['User','使用者','依相關使用者縮小結果；實際角色須在紀錄詳情確認。'],
+  ['Date','日期','尋找特定期間的評估；使用前先確認篩選的是哪一種日期。'],
+  ['Framework','框架','只看指定框架；比較結果前須確認框架與版本一致。'],
+  ['Assessment Name','評估名稱','辨識同一公司不同評估或不同輪次。'],
+  ['Completed Date','完成日期','判斷評估與證據的新舊程度。'],
+  ['Compliance','符合情形','框架符合性摘要，仍須開啟詳情核對控制項、證據與例外。'],
+  ['Views / Create View','檢視／建立檢視','切換或保存常用的篩選與欄位配置。'],
+  ['Active Filters / Clear All','使用中條件／清除全部','確認哪些條件影響結果；空白清單時應先檢查這裡。']
+];
+
+function fiAssessmentPage(){
+  return `<article class="doc"><button class="back-link" data-page="companies">← 返回公司清單</button><div class="eyebrow">投資組合風險 / Assessments (FI)</div><h1>框架情報評估</h1><p class="lead">Assessments (FI) 是跨公司的 Framework Intelligence 評估清單，可依公司、框架、狀態、使用者與日期查找紀錄。它和 Vendor Risk 底下、針對單一供應商的 Assessments 不同。</p><div class="callout"><strong>進入路徑</strong><br>左側選單 <code>Portfolio Risk → Assessments (FI)</code>。先核對目前 View、公司範圍與 Active Filters；結果為空時，不可直接推論帳號沒有評估。</div><h2>頁面結構</h2><ol><li><strong>篩選面板：</strong>用 Company、Status、User、Date、Framework 縮小範圍。</li><li><strong>檢視與欄位：</strong>用 Columns、Views、Create View 整理常用清單。</li><li><strong>評估表格：</strong>先核對 Assessment Name、Company、Framework、Status，再看 Completed Date 與 Compliance。</li><li><strong>詳情：</strong>開啟單筆評估，核對控制要求、證據、例外與框架版本。</li></ol><h2>欄位、篩選器與按鈕</h2>${guideTable(fiAssessmentTerms)}<h2>建議操作流程</h2><ol><li>確認公司範圍、View 與 Active Filters。</li><li>以 Company 或 Framework 縮小清單，避免混合不同對象或框架。</li><li>比較 Status、Completed Date 與 Compliance；不同框架或版本不要直接比較。</li><li>開啟詳情核對問題、證據與例外，記錄審查日期、範圍及待補資料。</li></ol><div class="example"><strong>使用情境：找最新完成評估</strong><p>選擇正確公司後套用 Completed，再依完成日期查看近期紀錄；如果同一公司有多筆評估，先確認框架與輪次。</p></div><h2>容易誤判的地方</h2><ul><li><strong>Completed 不等於合規：</strong>它是流程狀態，不能取代控制項審查。</li><li><strong>空白結果不等於沒有評估：</strong>可能受到狀態、日期、公司範圍、View 或權限影響。</li><li><strong>Compliance 是摘要：</strong>重要決策仍須回到證據與例外。</li><li><strong>User 不一定是責任人：</strong>實際角色以詳情為準。</li></ul><p class="note">本頁依 2026-10-29 可見的 BitSight Continuous Monitoring 側欄與既有評估介面整理；中文為教學用建議譯名。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="critical-assets"><strong>關鍵資產</strong><small>Critical Assets · 側欄下一個主題。</small></button><button class="feature-card" data-page="framework"><strong>框架情報</strong><small>Framework Intelligence · 查看單一供應商評估。</small></button></div></article>`;
+}
+
+const riskAnalyticsTerms = [
+  ['Average Portfolio Rating','投資組合平均評等','目前公司範圍的整體評等摘要；平均值不能代表每家公司。'],
+  ['Security Incidents','資安事件','依研究模型呈現投資組合相對於基準群的事件風險。'],
+  ['Ransomware','勒索軟體','依研究模型呈現投資組合相對於基準群的勒索軟體風險。'],
+  ['Baseline','基準','用來比較的 750+ 評等群組，不代表零風險。'],
+  ['Highest Elevated Risk','最高升高風險','目前公司中最高的相對風險級距。'],
+  ['Overall Elevated Risk','整體升高風險','落在高於基準級距的投資組合比例。'],
+  ["Today's View",'今日檢視','顯示目前各相對風險級距的分布。'],
+  ['Historical View','歷史檢視','比較一段時間內各級距占比的變化。'],
+  ['Risk Vectors Overview','風險面向總覽','從評等構成角度查看投資組合風險面向。'],
+  ['Download','下載','匯出目前分析；下載前核對公司範圍與資料敏感性。']
+];
+
+function riskAnalyticsPage(){
+  return `<article class="doc"><button class="back-link" data-page="critical-assets">← 返回關鍵資產</button><div class="eyebrow">投資組合風險 / Risk Analytics</div><h1>風險分析</h1><p class="lead">Risk Analytics 用評等級距與研究中的事件相關性，呈現投資組合遭遇資安事件或勒索軟體的相對風險，以及這些級距隨時間的變化。它是排序與溝通工具，不是事件發生機率的保證。</p><div class="callout"><strong>進入路徑</strong><br>左側選單 <code>Portfolio Risk → Risk Analytics</code>。頁面會依目前選擇的公司範圍重新計算；公開導覽不呈現帳號中的實際比例、公司或評等。</div><h2>畫面怎麼看</h2><ol><li><strong>整體摘要：</strong>先看 Average Portfolio Rating，再分別查看 Security Incidents 與 Ransomware。</li><li><strong>級距：</strong>以 Baseline 及多個評等區間對照相對風險倍數；事件與勒索軟體使用的倍數可能不同。</li><li><strong>今日與歷史：</strong>Today's View 看目前分布，Historical View 看各風險級距占比如何變化。</li><li><strong>風險面向：</strong>往下查看 Risk Vectors Overview，找出需要回到公司或 Findings 查證的面向。</li></ol><h2>專有名詞與按鈕</h2>${guideTable(riskAnalyticsTerms)}<h2>建議操作流程</h2><ol><li>先確認公司範圍與資料日期，避免拿不同資料夾或期間直接比較。</li><li>分開閱讀資安事件與勒索軟體，確認各自的 Baseline、級距及相對倍數。</li><li>比較 Today's View 與 Historical View，找出風險級距占比惡化的時間點。</li><li>回到 Companies List、Risk Vectors 或 Findings，辨識哪些公司與具體證據造成變化。</li><li>下載或報告時註明範圍、日期、研究基礎及限制。</li></ol><div class="example"><strong>使用情境：投資組合月度風險檢查</strong><p>固定相同公司範圍，比較整體升高風險比例與歷史趨勢；若某級距占比上升，再回到公司清單找出評等下降的供應商並核對發現事項。</p></div><h2>容易誤判的地方</h2><ul><li><strong>相對倍數不是預測機率：</strong>它描述研究中的相關性，不能斷言某家公司會發生事件。</li><li><strong>Baseline 不是安全保證：</strong>750+ 公司仍可能遭遇事件。</li><li><strong>百分比可能因四捨五入不等於 100%：</strong>應以畫面說明與原始範圍為準。</li><li><strong>投資組合摘要會隱藏個別差異：</strong>重要決策須回到公司與證據層級。</li></ul><p class="note">本頁依 2026-10-29 可見介面整理；風險倍數與級距可能隨產品研究或方法更新，實際數字以目前原系統為準。</p><h2>接著閱讀</h2><div class="feature-grid"><button class="feature-card" data-page="compare"><strong>公司比較</strong><small>Compare Companies · 並排檢查公司差異。</small></button><button class="feature-card" data-page="vectors"><strong>風險面向</strong><small>Risk Vectors · 深入評等構成。</small></button></div></article>`;
+}
 
 const criticalFilters = [
   ['Asset Type','資產類型','依網域、IP 等資產型態縮小清單。'],
@@ -644,11 +688,15 @@ function home(){
 function page(p){
   if(p.id==='dashboard')return dashboardPage(p);
   if(p.id==='companies')return companyPage(p);
+  if(p.id==='fi-assessments')return fiAssessmentPage(p);
   if(p.id==='critical-assets')return criticalAssetsPage(p);
+  if(p.id==='risk-analytics')return riskAnalyticsPage(p);
   if(p.id==='compare')return comparePage(p);
   if(p.id==='discovery')return discoveryPage(p);
   if(p.id==='expired')return expiredPage(p);
   if(p.id==='vendor-overview')return vendorOverviewPage(p);
+  if(p.id==='framework')return frameworkPage(p);
+  if(p.id==='instant')return instantPage(p);
   if(p.id==='assessments')return vendorAssessmentPage(p);
   if(p.id==='vectors')return vectorPage(p);
   if(p.id==='findings')return findingsPage(p);
@@ -691,7 +739,6 @@ function show(id){
       .replace('本次頁面顯示 Public Disclosures、0 Rows；要先檢查期間、資料夾、Tier、訂閱與警示設定，不能推論沒有第四方事件。','由 Public Disclosures 查看清單；資料列數會隨期間、資料夾、Tier、訂閱與警示設定改變，不能只用目前列數推論是否存在第四方風險。')
       .replace('0 Rows 受範圍與規則影響：','空白結果受範圍與規則影響：');
   }
-  main.querySelectorAll('[data-page="fi-assessments"],[data-page="framework"],[data-page="instant"]').forEach(link=>link.remove());
   renderNav(search.value);
   history.replaceState(null,'','#'+current);
   document.getElementById('sidebar').classList.remove('open');
