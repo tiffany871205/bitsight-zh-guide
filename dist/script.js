@@ -183,6 +183,7 @@ const companyColumns = [
 ];
 
 const guideTable=(rows)=>`<div class="doc-table"><table><thead><tr><th>英文</th><th>建議中文</th><th>功能與判讀</th></tr></thead><tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const availabilityNote='<p class="note"><strong>功能可用性：</strong>此頁是否顯示及可使用的功能，會因帳號方案、產品授權與使用者權限而異；有些帳號可能看不到此頁。</p>';
 
 const fiAssessmentTerms = [
   ['Company','公司','只看特定公司的框架評估紀錄。'],
@@ -729,6 +730,9 @@ function show(id){
   const p=pages[current];
   crumb.textContent=current==='home'?'文件首頁':`${p.group} / ${p.zh}`;
   main.innerHTML=current==='home'?home():page(p);
+  if(['fi-assessments','risk-analytics','framework','instant','access-links'].includes(current)){
+    main.querySelector('.callout')?.insertAdjacentHTML('afterend',availabilityNote);
+  }
   if(current==='portfolio-alerts'){
     main.innerHTML=main.innerHTML
       .replace('本次畫面表格顯示 0 Rows，應先檢查範圍、期間及警示規則，不能直接推論沒有風險。','資料列數會隨範圍、期間及警示規則改變，不能只用目前列數推論是否存在風險。')
